@@ -1,1 +1,1 @@
-Linux kernels for the X1000 and X5000 PowerPC computers.
+Linux kernels for X1000 and X5000 PowerPC computers.
