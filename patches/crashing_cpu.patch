@@ -1,0 +1,10 @@
+--- a/arch/powerpc/platforms/85xx/smp.c	2024-03-25 06:14:02.201209476 +0100
++++ b/arch/powerpc/platforms/85xx/smp.c	2024-03-25 06:10:04.421425931 +0100
+@@ -393,6 +393,7 @@ static void mpc85xx_smp_kexec_cpu_down(i
+ 	int disable_threadbit = 0;
+ 	long start = mftb();
+ 	long now;
++	int crashing_cpu = -1;	
+ 
+ 	local_irq_disable();
+ 	hard_irq_disable();
