@@ -9,4 +9,5 @@ Linux kernels for the A1222:
 http://www.fun-kart-racer.de/2bb57b2bbf87b668a94c/lxtest.html
 
 User Name: tabor
+
 Password: amigaone
