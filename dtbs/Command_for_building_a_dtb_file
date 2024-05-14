@@ -1,0 +1,1 @@
+dtc -I dts -O dtb -o cyrus_5040_eth.dtb cyrus_p5040.dts
