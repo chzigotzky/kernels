@@ -1,6 +1,6 @@
---- a/drivers/gpu/drm/drm_client.c	2024-01-14 14:12:59.493384199 +0100
-+++ b/drivers/gpu/drm/drm_client.c	2024-01-14 14:12:06.627113167 +0100
-@@ -390,6 +390,16 @@ static int drm_client_buffer_addfb(struc
+--- a/drivers/gpu/drm/drm_client.c	2024-05-16 04:55:38.360061923 +0200
++++ b/drivers/gpu/drm/drm_client.c	2024-05-16 04:53:42.048056665 +0200
+@@ -473,6 +473,16 @@ static int drm_client_buffer_addfb(struc
  
  	fb_req.width = width;
  	fb_req.height = height;
