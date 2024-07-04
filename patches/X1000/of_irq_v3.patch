@@ -1,0 +1,15 @@
+--- a/drivers/of/irq.c
++++ b/drivers/of/irq.c
+@@ -282,8 +282,10 @@ int of_irq_parse_raw(const __be32 *addr, struct of_phandle_args *out_irq)
+ 
+ 			oldimap = imap;
+ 			imap = of_irq_parse_imap_parent(oldimap, imaplen, out_irq);
+-			if (!imap)
+-				goto fail;
++			if (!imap) {
++				match = 0;
++				break;
++			}
+ 
+ 			match &= of_device_is_available(out_irq->np);
+ 			if (match)
