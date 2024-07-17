@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.10.0 Kernel Configuration
+# Linux/powerpc 6.11.0 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc-linux-gnu-gcc (Debian 9.5.0-1) 9.5.0"
 CONFIG_CC_IS_GCC=y
@@ -24,7 +24,7 @@ CONFIG_THREAD_INFO_IN_TASK=y
 CONFIG_INIT_ENV_ARG_LIMIT=32
 # CONFIG_COMPILE_TEST is not set
 # CONFIG_WERROR is not set
-CONFIG_LOCALVERSION="-powerpc64-smp"
+CONFIG_LOCALVERSION="-a1-powerpc64-smp"
 CONFIG_LOCALVERSION_AUTO=y
 CONFIG_BUILD_SALT=""
 CONFIG_HAVE_KERNEL_GZIP=y
@@ -1255,6 +1255,12 @@ CONFIG_PCIE_BUS_DEFAULT=y
 # CONFIG_PCI_SW_SWITCHTEC is not set
 # end of PCI switch controller drivers
 
+#
+# PCI Power control drivers
+#
+# CONFIG_PCI_PWRCTL_PWRSEQ is not set
+# end of PCI Power control drivers
+
 # CONFIG_CXL_BUS is not set
 CONFIG_PCCARD=y
 CONFIG_PCMCIA=y
@@ -2408,6 +2414,7 @@ CONFIG_PTP_1588_CLOCK_OPTIONAL=y
 # CONFIG_GPIOLIB is not set
 # CONFIG_W1 is not set
 # CONFIG_POWER_RESET is not set
+# CONFIG_POWER_SEQUENCING is not set
 CONFIG_POWER_SUPPLY=y
 # CONFIG_POWER_SUPPLY_DEBUG is not set
 CONFIG_POWER_SUPPLY_HWMON=y
@@ -2443,7 +2450,6 @@ CONFIG_HWMON=y
 #
 # CONFIG_SENSORS_AD7414 is not set
 # CONFIG_SENSORS_AD7418 is not set
-# CONFIG_SENSORS_ADM1021 is not set
 # CONFIG_SENSORS_ADM1025 is not set
 # CONFIG_SENSORS_ADM1026 is not set
 # CONFIG_SENSORS_ADM1029 is not set
@@ -2503,7 +2509,6 @@ CONFIG_HWMON=y
 # CONFIG_SENSORS_MAX6620 is not set
 # CONFIG_SENSORS_MAX6621 is not set
 # CONFIG_SENSORS_MAX6639 is not set
-# CONFIG_SENSORS_MAX6642 is not set
 # CONFIG_SENSORS_MAX6650 is not set
 # CONFIG_SENSORS_MAX6697 is not set
 # CONFIG_SENSORS_MAX31790 is not set
@@ -2557,6 +2562,7 @@ CONFIG_HWMON=y
 # CONFIG_SENSORS_INA2XX is not set
 # CONFIG_SENSORS_INA238 is not set
 # CONFIG_SENSORS_INA3221 is not set
+# CONFIG_SENSORS_SPD5118 is not set
 # CONFIG_SENSORS_TC74 is not set
 # CONFIG_SENSORS_THMC50 is not set
 # CONFIG_SENSORS_TMP102 is not set
@@ -4620,6 +4626,7 @@ CONFIG_R8712U=m
 # CONFIG_FIELDBUS_DEV is not set
 # CONFIG_VME_BUS is not set
 # CONFIG_GOLDFISH is not set
+# CONFIG_CZNIC_PLATFORMS is not set
 # CONFIG_COMMON_CLK is not set
 # CONFIG_HWSPINLOCK is not set
 
