@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.11.0 Kernel Configuration
+# Linux/powerpc 6.11.0-rc1 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc-linux-gnu-gcc (Debian 9.5.0-1) 9.5.0"
 CONFIG_CC_IS_GCC=y
@@ -25,7 +25,7 @@ CONFIG_THREAD_INFO_IN_TASK=y
 CONFIG_INIT_ENV_ARG_LIMIT=32
 # CONFIG_COMPILE_TEST is not set
 # CONFIG_WERROR is not set
-CONFIG_LOCALVERSION="-a5-powerpc64-smp"
+CONFIG_LOCALVERSION="-powerpc64-smp"
 CONFIG_LOCALVERSION_AUTO=y
 CONFIG_BUILD_SALT=""
 CONFIG_HAVE_KERNEL_GZIP=y
@@ -5578,7 +5578,6 @@ CONFIG_NETFS_SUPPORT=y
 # CONFIG_NETFS_STATS is not set
 CONFIG_FSCACHE=y
 # CONFIG_FSCACHE_STATS is not set
-# CONFIG_FSCACHE_DEBUG is not set
 CONFIG_CACHEFILES=y
 # CONFIG_CACHEFILES_DEBUG is not set
 # CONFIG_CACHEFILES_ERROR_INJECTION is not set
