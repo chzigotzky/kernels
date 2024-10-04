@@ -1,0 +1,78 @@
+diff --git a/drivers/gpu/drm/radeon/atombios_dp.c b/drivers/gpu/drm/radeon/atombios_dp.c
+index fca8b08535a5..6328627b7c34 100644
+--- a/drivers/gpu/drm/radeon/atombios_dp.c
++++ b/drivers/gpu/drm/radeon/atombios_dp.c
+@@ -228,10 +228,8 @@ void radeon_dp_aux_init(struct radeon_connector *radeon_connector)
+ {
+ 	struct drm_device *dev = radeon_connector->base.dev;
+ 	struct radeon_device *rdev = dev->dev_private;
+-	int ret;
+ 
+ 	radeon_connector->ddc_bus->rec.hpd = radeon_connector->hpd.hpd;
+-	radeon_connector->ddc_bus->aux.dev = radeon_connector->base.kdev;
+ 	radeon_connector->ddc_bus->aux.drm_dev = radeon_connector->base.dev;
+ 	if (ASIC_IS_DCE5(rdev)) {
+ 		if (radeon_auxch)
+@@ -242,11 +240,8 @@ void radeon_dp_aux_init(struct radeon_connector *radeon_connector)
+ 		radeon_connector->ddc_bus->aux.transfer = radeon_dp_aux_transfer_atom;
+ 	}
+ 
+-	ret = drm_dp_aux_register(&radeon_connector->ddc_bus->aux);
+-	if (!ret)
+-		radeon_connector->ddc_bus->has_aux = true;
+-
+-	WARN(ret, "drm_dp_aux_register() failed with error %d\n", ret);
++	drm_dp_aux_init(&radeon_connector->ddc_bus->aux);
++	radeon_connector->ddc_bus->has_aux = true;
+ }
+ 
+ /***** general DP utility functions *****/
+diff --git a/drivers/gpu/drm/radeon/radeon_connectors.c b/drivers/gpu/drm/radeon/radeon_connectors.c
+index 528a8f3677c2..f9c73c55f04f 100644
+--- a/drivers/gpu/drm/radeon/radeon_connectors.c
++++ b/drivers/gpu/drm/radeon/radeon_connectors.c
+@@ -1786,6 +1786,20 @@ static enum drm_mode_status radeon_dp_mode_valid(struct drm_connector *connector
+ 	return MODE_OK;
+ }
+ 
++static int
++radeon_connector_late_register(struct drm_connector *connector)
++{
++	struct radeon_connector *radeon_connector = to_radeon_connector(connector);
++	int r = 0;
++
++	if (radeon_connector->ddc_bus->has_aux) {
++		radeon_connector->ddc_bus->aux.dev = radeon_connector->base.kdev;
++		r = drm_dp_aux_register(&radeon_connector->ddc_bus->aux);
++	}
++
++	return r;
++}
++
+ static const struct drm_connector_helper_funcs radeon_dp_connector_helper_funcs = {
+ 	.get_modes = radeon_dp_get_modes,
+ 	.mode_valid = radeon_dp_mode_valid,
+@@ -1800,6 +1814,7 @@ static const struct drm_connector_funcs radeon_dp_connector_funcs = {
+ 	.early_unregister = radeon_connector_unregister,
+ 	.destroy = radeon_connector_destroy,
+ 	.force = radeon_dvi_force,
++	.late_register = radeon_connector_late_register,
+ };
+ 
+ static const struct drm_connector_funcs radeon_edp_connector_funcs = {
+@@ -1810,6 +1825,7 @@ static const struct drm_connector_funcs radeon_edp_connector_funcs = {
+ 	.early_unregister = radeon_connector_unregister,
+ 	.destroy = radeon_connector_destroy,
+ 	.force = radeon_dvi_force,
++	.late_register = radeon_connector_late_register,
+ };
+ 
+ static const struct drm_connector_funcs radeon_lvds_bridge_connector_funcs = {
+@@ -1820,6 +1836,7 @@ static const struct drm_connector_funcs radeon_lvds_bridge_connector_funcs = {
+ 	.early_unregister = radeon_connector_unregister,
+ 	.destroy = radeon_connector_destroy,
+ 	.force = radeon_dvi_force,
++	.late_register = radeon_connector_late_register,
+ };
+ 
+ void
