@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.12.0-rc3 Kernel Configuration
+# Linux/powerpc 6.12.0-rc4 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc64-suse-linux-gcc (SUSE Linux) 7.5.0"
 CONFIG_CC_IS_GCC=y
@@ -12,6 +12,7 @@ CONFIG_LD_IS_BFD=y
 CONFIG_LD_VERSION=24301
 CONFIG_LLD_VERSION=0
 CONFIG_RUSTC_VERSION=0
+CONFIG_RUSTC_LLVM_VERSION=0
 CONFIG_GCC_ASM_GOTO_OUTPUT_BROKEN=y
 CONFIG_CC_HAS_ASM_INLINE=y
 CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
