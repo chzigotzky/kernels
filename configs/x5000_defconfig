@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 5.10.225 Kernel Configuration
+# Linux/powerpc 5.10.228 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc64-suse-linux-gcc (SUSE Linux) 7.5.0"
 CONFIG_CC_IS_GCC=y
@@ -5574,6 +5574,9 @@ CONFIG_KEYS=y
 CONFIG_ENCRYPTED_KEYS=y
 # CONFIG_KEY_DH_OPERATIONS is not set
 # CONFIG_SECURITY_DMESG_RESTRICT is not set
+CONFIG_PROC_MEM_ALWAYS_FORCE=y
+# CONFIG_PROC_MEM_FORCE_PTRACE is not set
+# CONFIG_PROC_MEM_NO_FORCE is not set
 # CONFIG_SECURITY is not set
 CONFIG_SECURITYFS=y
 CONFIG_HAVE_HARDENED_USERCOPY_ALLOCATOR=y
