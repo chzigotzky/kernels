@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.12.0-rc7 Kernel Configuration
+# Linux/powerpc 6.12.0 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc64-suse-linux-gcc (SUSE Linux) 7.5.0"
 CONFIG_CC_IS_GCC=y
@@ -381,6 +381,7 @@ CONFIG_ARCH_SUPPORTS_KEXEC_PURGATORY=y
 # CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 is not set
 # CONFIG_RELOCATABLE is not set
 CONFIG_ARCH_SUPPORTS_CRASH_DUMP=y
+CONFIG_ARCH_DEFAULT_CRASH_DUMP=y
 CONFIG_ARCH_SUPPORTS_CRASH_HOTPLUG=y
 CONFIG_IRQ_ALL_CPUS=y
 # CONFIG_NUMA is not set
