@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.13.0 Kernel Configuration
+# Linux/powerpc 6.13.0-rc1 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc64-suse-linux-gcc (SUSE Linux) 7.5.0"
 CONFIG_CC_IS_GCC=y
@@ -27,7 +27,7 @@ CONFIG_THREAD_INFO_IN_TASK=y
 CONFIG_INIT_ENV_ARG_LIMIT=32
 # CONFIG_COMPILE_TEST is not set
 # CONFIG_WERROR is not set
-CONFIG_LOCALVERSION="-a5-powerpc64-smp"
+CONFIG_LOCALVERSION="-powerpc64-smp"
 CONFIG_LOCALVERSION_AUTO=y
 CONFIG_BUILD_SALT=""
 CONFIG_HAVE_KERNEL_GZIP=y
@@ -1676,20 +1676,13 @@ CONFIG_BLK_DEV_NVME=y
 # CONFIG_EEPROM_AT24 is not set
 # CONFIG_EEPROM_AT25 is not set
 # CONFIG_EEPROM_MAX6875 is not set
-CONFIG_EEPROM_93CX6=m
+CONFIG_EEPROM_93CX6=y
 # CONFIG_EEPROM_93XX46 is not set
 # CONFIG_EEPROM_IDT_89HPESX is not set
 # CONFIG_EEPROM_EE1004 is not set
 # end of EEPROM support
 
 # CONFIG_CB710_CORE is not set
-
-#
-# Texas Instruments shared transport line discipline
-#
-# CONFIG_TI_ST is not set
-# end of Texas Instruments shared transport line discipline
-
 # CONFIG_SENSORS_LIS3_SPI is not set
 # CONFIG_SENSORS_LIS3_I2C is not set
 CONFIG_ALTERA_STAPL=m
@@ -1701,7 +1694,6 @@ CONFIG_ALTERA_STAPL=m
 # CONFIG_MISC_RTSX_USB is not set
 # CONFIG_PVPANIC is not set
 # CONFIG_GP_PCI1XXXX is not set
-# CONFIG_KEBA_CP500 is not set
 # end of Misc devices
 
 #
@@ -5248,17 +5240,12 @@ CONFIG_VHOST_NET=m
 # CONFIG_COMEDI is not set
 CONFIG_STAGING=y
 # CONFIG_RTL8723BS is not set
-# CONFIG_R8712U is not set
-# CONFIG_RTS5208 is not set
-# CONFIG_VT6655 is not set
-# CONFIG_VT6656 is not set
 # CONFIG_FB_SM750 is not set
 # CONFIG_STAGING_MEDIA is not set
-# CONFIG_LTE_GDM724X is not set
 # CONFIG_FB_TFT is not set
 # CONFIG_XIL_AXIS_FIFO is not set
-# CONFIG_FIELDBUS_DEV is not set
 # CONFIG_VME_BUS is not set
+# CONFIG_GPIB is not set
 # CONFIG_GOLDFISH is not set
 # CONFIG_CZNIC_PLATFORMS is not set
 CONFIG_HAVE_CLK=y
