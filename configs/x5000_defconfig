@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.13.0-rc1 Kernel Configuration
+# Linux/powerpc 6.13.0-rc2 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc64-suse-linux-gcc (SUSE Linux) 7.5.0"
 CONFIG_CC_IS_GCC=y
@@ -394,7 +394,7 @@ CONFIG_THREAD_SHIFT=14
 CONFIG_DATA_SHIFT=12
 CONFIG_ARCH_FORCE_MAX_ORDER=12
 # CONFIG_SCHED_SMT is not set
-CONFIG_CMDLINE="console=ttyS0,115200 console=tty0 mem=3500M"
+CONFIG_CMDLINE="console=ttyS0,115200"
 CONFIG_CMDLINE_FROM_BOOTLOADER=y
 # CONFIG_CMDLINE_EXTEND is not set
 # CONFIG_CMDLINE_FORCE is not set
