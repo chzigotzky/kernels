@@ -1,6 +1,6 @@
 diff -rupN a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
 --- a/arch/powerpc/kvm/e500_mmu_host.c	2024-12-22 22:22:21.000000000 +0100
-+++ b/arch/powerpc/kvm/e500_mmu_host.c	2024-12-28 12:20:18.588599608 +0100
++++ b/arch/powerpc/kvm/e500_mmu_host.c	2024-12-28 12:58:06.336189924 +0100
 @@ -242,7 +242,7 @@ static inline int tlbe_is_writable(struc
  	return tlbe->mas7_3 & (MAS3_SW|MAS3_UW);
  }
@@ -67,7 +67,7 @@ diff -rupN a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
  
 diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
 --- a/include/linux/kvm_host.h	2024-12-22 22:22:21.000000000 +0100
-+++ b/include/linux/kvm_host.h	2024-12-28 12:18:30.583120006 +0100
++++ b/include/linux/kvm_host.h	2024-12-28 12:58:46.366626238 +0100
 @@ -97,7 +97,6 @@
  #define KVM_PFN_ERR_HWPOISON	(KVM_PFN_ERR_MASK + 1)
  #define KVM_PFN_ERR_RO_FAULT	(KVM_PFN_ERR_MASK + 2)
@@ -143,7 +143,7 @@ diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
  /*
   * KVM_SET_USER_MEMORY_REGION ioctl allows the following operations:
   * - create a new memory slot
-@@ -1212,70 +1214,33 @@ void kvm_arch_flush_shadow_all(struct kv
+@@ -1212,70 +1214,31 @@ void kvm_arch_flush_shadow_all(struct kv
  void kvm_arch_flush_shadow_memslot(struct kvm *kvm,
  				   struct kvm_memory_slot *slot);
  
@@ -180,7 +180,15 @@ diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
 -					    bool unused, bool dirty)
 -{
 -	lockdep_assert_once(lockdep_is_held(&kvm->mmu_lock) || unused);
--
++kvm_pfn_t gfn_to_pfn(struct kvm *kvm, gfn_t gfn);
++kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
++		      bool *writable);
++kvm_pfn_t gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn);
++kvm_pfn_t gfn_to_pfn_memslot_atomic(const struct kvm_memory_slot *slot, gfn_t gfn);
++kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
++			       bool atomic, bool interruptible, bool *async,
++			       bool write_fault, bool *writable, hva_t *hva);
+ 
 -	if (!page)
 -		return;
 -
@@ -213,25 +221,14 @@ diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
 -	return __kvm_faultin_pfn(kvm_vcpu_gfn_to_memslot(vcpu, gfn), gfn,
 -				 write ? FOLL_WRITE : 0, writable, refcounted_page);
 -}
-+kvm_pfn_t gfn_to_pfn(struct kvm *kvm, gfn_t gfn);
-+kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
-+		      bool *writable);
-+kvm_pfn_t gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn);
-+kvm_pfn_t gfn_to_pfn_memslot_atomic(const struct kvm_memory_slot *slot, gfn_t gfn);
-+kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
-+			       bool atomic, bool interruptible, bool *async,
-+			       bool write_fault, bool *writable, hva_t *hva);
-+
 +void kvm_release_pfn_clean(kvm_pfn_t pfn);
 +void kvm_release_pfn_dirty(kvm_pfn_t pfn);
-+void kvm_set_pfn_dirty(kvm_pfn_t pfn);
-+void kvm_set_pfn_accessed(kvm_pfn_t pfn);
  
 +void kvm_release_pfn(kvm_pfn_t pfn, bool dirty);
  int kvm_read_guest_page(struct kvm *kvm, gfn_t gfn, void *data, int offset,
  			int len);
  int kvm_read_guest(struct kvm *kvm, gpa_t gpa, void *data, unsigned long len);
-@@ -1339,28 +1304,17 @@ int kvm_gfn_to_hva_cache_init(struct kvm
+@@ -1339,28 +1302,17 @@ int kvm_gfn_to_hva_cache_init(struct kvm
  })
  
  int kvm_clear_guest(struct kvm *kvm, gpa_t gpa, unsigned long len);
@@ -265,7 +262,7 @@ diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
  unsigned long kvm_vcpu_gfn_to_hva(struct kvm_vcpu *vcpu, gfn_t gfn);
  unsigned long kvm_vcpu_gfn_to_hva_prot(struct kvm_vcpu *vcpu, gfn_t gfn, bool *writable);
  int kvm_vcpu_read_guest_page(struct kvm_vcpu *vcpu, gfn_t gfn, void *data, int offset,
-@@ -1732,6 +1686,9 @@ void kvm_arch_sync_events(struct kvm *kv
+@@ -1732,6 +1684,9 @@ void kvm_arch_sync_events(struct kvm *kv
  
  int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
  
@@ -275,7 +272,7 @@ diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
  struct kvm_irq_ack_notifier {
  	struct hlist_node link;
  	unsigned gsi;
-@@ -2498,13 +2455,11 @@ static inline bool kvm_mem_is_private(st
+@@ -2498,13 +2453,11 @@ static inline bool kvm_mem_is_private(st
  
  #ifdef CONFIG_KVM_PRIVATE_MEM
  int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
@@ -293,7 +290,7 @@ diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
  	return -EIO;
 diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
 --- a/virt/kvm/kvm_main.c	2024-12-22 22:22:21.000000000 +0100
-+++ b/virt/kvm/kvm_main.c	2024-12-28 12:18:30.585119978 +0100
++++ b/virt/kvm/kvm_main.c	2024-12-28 12:59:17.697185059 +0100
 @@ -95,13 +95,6 @@ module_param(halt_poll_ns_shrink, uint,
  EXPORT_SYMBOL_GPL(halt_poll_ns_shrink);
  
@@ -446,7 +443,8 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
 -}
 -
 -static void kvm_set_page_accessed(struct page *page)
--{
++static inline int check_user_page_hwpoison(unsigned long addr)
+ {
 -	if (kvm_is_ad_tracked_page(page))
 -		mark_page_accessed(page);
 -}
@@ -455,7 +453,8 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
 -{
 -	if (!page)
 -		return;
--
++	int rc, flags = FOLL_HWPOISON | FOLL_WRITE;
+ 
 -	kvm_set_page_accessed(page);
 -	put_page(page);
 -}
@@ -473,13 +472,11 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
 -
 -static kvm_pfn_t kvm_resolve_pfn(struct kvm_follow_pfn *kfp, struct page *page,
 -				 struct follow_pfnmap_args *map, bool writable)
-+static inline int check_user_page_hwpoison(unsigned long addr)
- {
+-{
 -	kvm_pfn_t pfn;
 -
 -	WARN_ON_ONCE(!!page == !!map);
-+	int rc, flags = FOLL_HWPOISON | FOLL_WRITE;
- 
+-
 -	if (kfp->map_writable)
 -		*kfp->map_writable = writable;
 -
@@ -783,18 +780,18 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
 -	kfp->hva = __gfn_to_hva_many(kfp->slot, kfp->gfn, NULL,
 -				     kfp->flags & FOLL_WRITE);
 +	unsigned long addr = __gfn_to_hva_many(slot, gfn, NULL, write_fault);
-+
-+	if (hva)
-+		*hva = addr;
  
 -	if (kfp->hva == KVM_HVA_ERR_RO_BAD)
 -		return KVM_PFN_ERR_RO_FAULT;
-+	if (kvm_is_error_hva(addr)) {
-+		if (writable)
-+			*writable = false;
++	if (hva)
++		*hva = addr;
  
 -	if (kvm_is_error_hva(kfp->hva))
 -		return KVM_PFN_NOSLOT;
++	if (kvm_is_error_hva(addr)) {
++		if (writable)
++			*writable = false;
++
 +		return addr == KVM_HVA_ERR_RO_BAD ? KVM_PFN_ERR_RO_FAULT :
 +						    KVM_PFN_NOSLOT;
 +	}
@@ -865,7 +862,7 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
  {
  	unsigned long addr;
  	gfn_t entry = 0;
-@@ -3000,92 +3056,193 @@ int kvm_prefetch_pages(struct kvm_memory
+@@ -3000,92 +3056,173 @@ int kvm_prefetch_pages(struct kvm_memory
  
  	return get_user_pages_fast_only(addr, nr_pages, FOLL_WRITE, pages);
  }
@@ -900,21 +897,29 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
 +
 +	if (is_error_noslot_pfn(pfn))
 +		return KVM_ERR_PTR_BAD_PAGE;
- 
--	(void)kvm_follow_pfn(&kfp);
--	return refcounted_page;
++
 +	page = kvm_pfn_to_refcounted_page(pfn);
 +	if (!page)
 +		return KVM_ERR_PTR_BAD_PAGE;
 +
 +	return page;
++}
++EXPORT_SYMBOL_GPL(gfn_to_page);
+ 
+-	(void)kvm_follow_pfn(&kfp);
+-	return refcounted_page;
++void kvm_release_pfn(kvm_pfn_t pfn, bool dirty)
++{
++	if (dirty)
++		kvm_release_pfn_dirty(pfn);
++	else
++		kvm_release_pfn_clean(pfn);
  }
 -EXPORT_SYMBOL_GPL(__gfn_to_page);
-+EXPORT_SYMBOL_GPL(gfn_to_page);
  
 -int __kvm_vcpu_map(struct kvm_vcpu *vcpu, gfn_t gfn, struct kvm_host_map *map,
 -		   bool writable)
-+void kvm_release_pfn(kvm_pfn_t pfn, bool dirty)
++int kvm_vcpu_map(struct kvm_vcpu *vcpu, gfn_t gfn, struct kvm_host_map *map)
  {
 -	struct kvm_follow_pfn kfp = {
 -		.slot = gfn_to_memslot(vcpu->kvm, gfn),
@@ -923,35 +928,27 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
 -		.refcounted_page = &map->pinned_page,
 -		.pin = true,
 -	};
-+	if (dirty)
-+		kvm_release_pfn_dirty(pfn);
-+	else
-+		kvm_release_pfn_clean(pfn);
-+}
++	kvm_pfn_t pfn;
++	void *hva = NULL;
++	struct page *page = KVM_UNMAPPED_PAGE;
  
 -	map->pinned_page = NULL;
 -	map->page = NULL;
 -	map->hva = NULL;
 -	map->gfn = gfn;
 -	map->writable = writable;
-+int kvm_vcpu_map(struct kvm_vcpu *vcpu, gfn_t gfn, struct kvm_host_map *map)
-+{
-+	kvm_pfn_t pfn;
-+	void *hva = NULL;
-+	struct page *page = KVM_UNMAPPED_PAGE;
++	if (!map)
++		return -EINVAL;
  
 -	map->pfn = kvm_follow_pfn(&kfp);
 -	if (is_error_noslot_pfn(map->pfn))
-+	if (!map)
++	pfn = gfn_to_pfn(vcpu->kvm, gfn);
++	if (is_error_noslot_pfn(pfn))
  		return -EINVAL;
  
 -	if (pfn_valid(map->pfn)) {
 -		map->page = pfn_to_page(map->pfn);
 -		map->hva = kmap(map->page);
-+	pfn = gfn_to_pfn(vcpu->kvm, gfn);
-+	if (is_error_noslot_pfn(pfn))
-+		return -EINVAL;
-+
 +	if (pfn_valid(pfn)) {
 +		page = pfn_to_page(pfn);
 +		hva = kmap(page);
@@ -1085,30 +1082,10 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
 + * directly marking a page dirty/accessed.  Unlike the "release" helpers, the
 + * "set" helpers are not to be used when the pfn might point at garbage.
 + */
-+void kvm_set_pfn_dirty(kvm_pfn_t pfn)
-+{
-+	if (WARN_ON(is_error_noslot_pfn(pfn)))
-+		return;
-+
-+	if (pfn_valid(pfn))
-+		kvm_set_page_dirty(pfn_to_page(pfn));
-+}
-+EXPORT_SYMBOL_GPL(kvm_set_pfn_dirty);
-+
-+void kvm_set_pfn_accessed(kvm_pfn_t pfn)
-+{
-+	if (WARN_ON(is_error_noslot_pfn(pfn)))
-+		return;
-+
-+	if (pfn_valid(pfn))
-+		kvm_set_page_accessed(pfn_to_page(pfn));
-+}
-+EXPORT_SYMBOL_GPL(kvm_set_pfn_accessed);
-+
  static int next_segment(unsigned long len, int offset)
  {
  	if (len > PAGE_SIZE - offset)
-@@ -3763,19 +3920,17 @@ EXPORT_SYMBOL_GPL(kvm_vcpu_kick);
+@@ -3763,19 +3900,17 @@ EXPORT_SYMBOL_GPL(kvm_vcpu_kick);
  
  int kvm_vcpu_yield_to(struct kvm_vcpu *target)
  {
@@ -1136,7 +1113,7 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
  	ret = yield_to(task, 1);
  	put_task_struct(task);
  
-@@ -3864,71 +4019,59 @@ bool __weak kvm_arch_dy_has_pending_inte
+@@ -3864,71 +3999,59 @@ bool __weak kvm_arch_dy_has_pending_inte
  
  void kvm_vcpu_on_spin(struct kvm_vcpu *me, bool yield_to_kernel_mode)
  {
@@ -1253,7 +1230,7 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
  		}
  	}
  	kvm_vcpu_set_in_spin_loop(me, false);
-@@ -4025,9 +4168,9 @@ static int vcpu_get_pid(void *data, u64
+@@ -4025,9 +4148,9 @@ static int vcpu_get_pid(void *data, u64
  {
  	struct kvm_vcpu *vcpu = data;
  
@@ -1266,7 +1243,7 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
  	return 0;
  }
  
-@@ -4313,14 +4456,7 @@ static long kvm_vcpu_ioctl(struct file *
+@@ -4313,14 +4436,7 @@ static long kvm_vcpu_ioctl(struct file *
  		r = -EINVAL;
  		if (arg)
  			goto out;
@@ -1282,7 +1259,7 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
  		if (unlikely(oldpid != task_pid(current))) {
  			/* The thread running this VCPU changed. */
  			struct pid *newpid;
-@@ -4330,10 +4466,9 @@ static long kvm_vcpu_ioctl(struct file *
+@@ -4330,10 +4446,9 @@ static long kvm_vcpu_ioctl(struct file *
  				break;
  
  			newpid = get_task_pid(current, PIDTYPE_PID);
@@ -1298,7 +1275,7 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
  		vcpu->wants_to_run = !READ_ONCE(vcpu->run->immediate_exit__unsafe);
 diff -rupN a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
 --- a/virt/kvm/kvm_mm.h	2024-12-22 22:22:21.000000000 +0100
-+++ b/virt/kvm/kvm_mm.h	2024-12-28 12:18:30.585119978 +0100
++++ b/virt/kvm/kvm_mm.h	2024-12-28 12:59:46.047785841 +0100
 @@ -53,7 +53,8 @@ struct kvm_follow_pfn {
  	struct page **refcounted_page;
  };
