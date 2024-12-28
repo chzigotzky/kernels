@@ -1,24 +1,7 @@
 diff -rupN a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
 --- a/arch/powerpc/kvm/e500_mmu_host.c	2024-12-22 22:22:21.000000000 +0100
-+++ b/arch/powerpc/kvm/e500_mmu_host.c	2024-12-28 12:58:06.336189924 +0100
-@@ -242,7 +242,7 @@ static inline int tlbe_is_writable(struc
- 	return tlbe->mas7_3 & (MAS3_SW|MAS3_UW);
- }
- 
--static inline bool kvmppc_e500_ref_setup(struct tlbe_ref *ref,
-+static inline void kvmppc_e500_ref_setup(struct tlbe_ref *ref,
- 					 struct kvm_book3e_206_tlb_entry *gtlbe,
- 					 kvm_pfn_t pfn, unsigned int wimg)
- {
-@@ -252,7 +252,6 @@ static inline bool kvmppc_e500_ref_setup
- 	/* Use guest supplied MAS2_G and MAS2_E */
- 	ref->flags |= (gtlbe->mas2 & MAS2_ATTRIB_MASK) | wimg;
- 
--	return tlbe_is_writable(gtlbe);
- }
- 
- static inline void kvmppc_e500_ref_release(struct tlbe_ref *ref)
-@@ -322,7 +321,6 @@ static inline int kvmppc_e500_shadow_map
++++ b/arch/powerpc/kvm/e500_mmu_host.c	2024-12-28 15:19:13.339208213 +0100
+@@ -322,7 +322,6 @@ static inline int kvmppc_e500_shadow_map
  {
  	struct kvm_memory_slot *slot;
  	unsigned long pfn = 0; /* silence GCC warning */
@@ -26,48 +9,26 @@ diff -rupN a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
  	unsigned long hva;
  	int pfnmap = 0;
  	int tsize = BOOK3E_PAGESZ_4K;
-@@ -334,7 +332,6 @@ static inline int kvmppc_e500_shadow_map
- 	unsigned int wimg = 0;
- 	pgd_t *pgdir;
- 	unsigned long flags;
--	bool writable = false;
- 
- 	/* used to check for invalidations in progress */
- 	mmu_seq = kvm->mmu_invalidate_seq;
-@@ -444,7 +441,7 @@ static inline int kvmppc_e500_shadow_map
+@@ -444,7 +443,7 @@ static inline int kvmppc_e500_shadow_map
  
  	if (likely(!pfnmap)) {
  		tsize_pages = 1UL << (tsize + 10 - PAGE_SHIFT);
 -		pfn = __kvm_faultin_pfn(slot, gfn, FOLL_WRITE, NULL, &page);
-+		pfn = gfn_to_pfn_memslot(slot, gfn);
++		pfn = gfn_to_pfn_memslot(slot, gfn);	
  		if (is_error_noslot_pfn(pfn)) {
  			if (printk_ratelimit())
  				pr_err("%s: real page not found for gfn %lx\n",
-@@ -488,7 +485,7 @@ static inline int kvmppc_e500_shadow_map
- 			goto out;
- 		}
- 	}
--	writable = kvmppc_e500_ref_setup(ref, gtlbe, pfn, wimg);
-+	kvmppc_e500_ref_setup(ref, gtlbe, pfn, wimg);
- 
- 	kvmppc_e500_setup_stlbe(&vcpu_e500->vcpu, gtlbe, tsize,
- 				ref, gvaddr, stlbe);
-@@ -497,8 +494,11 @@ static inline int kvmppc_e500_shadow_map
+@@ -497,7 +496,6 @@ static inline int kvmppc_e500_shadow_map
  	kvmppc_mmu_flush_icache(pfn);
  
  out:
 -	kvm_release_faultin_page(kvm, page, !!ret, writable);
  	spin_unlock(&kvm->mmu_lock);
-+
-+	/* Drop refcount on page, so that mmu notifiers can clear it */
-+	kvm_release_pfn_clean(pfn);
-+
  	return ret;
  }
- 
 diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
 --- a/include/linux/kvm_host.h	2024-12-22 22:22:21.000000000 +0100
-+++ b/include/linux/kvm_host.h	2024-12-28 12:58:46.366626238 +0100
++++ b/include/linux/kvm_host.h	2024-12-28 15:18:44.285595878 +0100
 @@ -97,7 +97,6 @@
  #define KVM_PFN_ERR_HWPOISON	(KVM_PFN_ERR_MASK + 1)
  #define KVM_PFN_ERR_RO_FAULT	(KVM_PFN_ERR_MASK + 2)
@@ -290,7 +251,7 @@ diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
  	return -EIO;
 diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
 --- a/virt/kvm/kvm_main.c	2024-12-22 22:22:21.000000000 +0100
-+++ b/virt/kvm/kvm_main.c	2024-12-28 12:59:17.697185059 +0100
++++ b/virt/kvm/kvm_main.c	2024-12-28 15:18:44.289595825 +0100
 @@ -95,13 +95,6 @@ module_param(halt_poll_ns_shrink, uint,
  EXPORT_SYMBOL_GPL(halt_poll_ns_shrink);
  
@@ -1275,7 +1236,7 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
  		vcpu->wants_to_run = !READ_ONCE(vcpu->run->immediate_exit__unsafe);
 diff -rupN a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
 --- a/virt/kvm/kvm_mm.h	2024-12-22 22:22:21.000000000 +0100
-+++ b/virt/kvm/kvm_mm.h	2024-12-28 12:59:46.047785841 +0100
++++ b/virt/kvm/kvm_mm.h	2024-12-28 15:18:50.575511951 +0100
 @@ -53,7 +53,8 @@ struct kvm_follow_pfn {
  	struct page **refcounted_page;
  };
