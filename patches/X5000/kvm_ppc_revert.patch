@@ -1,6 +1,6 @@
 diff -rupN a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
 --- a/arch/powerpc/kvm/e500_mmu_host.c	2024-12-22 22:22:21.000000000 +0100
-+++ b/arch/powerpc/kvm/e500_mmu_host.c	2024-12-26 14:32:45.911614589 +0100
++++ b/arch/powerpc/kvm/e500_mmu_host.c	2024-12-28 11:15:31.824472684 +0100
 @@ -242,7 +242,7 @@ static inline int tlbe_is_writable(struc
  	return tlbe->mas7_3 & (MAS3_SW|MAS3_UW);
  }
@@ -72,7 +72,7 @@ diff -rupN a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
  
 diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
 --- a/include/linux/kvm_host.h	2024-12-22 22:22:21.000000000 +0100
-+++ b/include/linux/kvm_host.h	2024-12-26 14:32:59.378419953 +0100
++++ b/include/linux/kvm_host.h	2024-12-28 11:15:46.189269815 +0100
 @@ -97,7 +97,6 @@
  #define KVM_PFN_ERR_HWPOISON	(KVM_PFN_ERR_MASK + 1)
  #define KVM_PFN_ERR_RO_FAULT	(KVM_PFN_ERR_MASK + 2)
@@ -298,7 +298,7 @@ diff -rupN a/include/linux/kvm_host.h b/include/linux/kvm_host.h
  	return -EIO;
 diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
 --- a/virt/kvm/kvm_main.c	2024-12-22 22:22:21.000000000 +0100
-+++ b/virt/kvm/kvm_main.c	2024-12-26 14:33:13.091221760 +0100
++++ b/virt/kvm/kvm_main.c	2024-12-28 11:16:00.946061409 +0100
 @@ -95,13 +95,6 @@ module_param(halt_poll_ns_shrink, uint,
  EXPORT_SYMBOL_GPL(halt_poll_ns_shrink);
  
@@ -1303,44 +1303,11 @@ diff -rupN a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
  		vcpu->wants_to_run = !READ_ONCE(vcpu->run->immediate_exit__unsafe);
 diff -rupN a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
 --- a/virt/kvm/kvm_mm.h	2024-12-22 22:22:21.000000000 +0100
-+++ b/virt/kvm/kvm_mm.h	2024-12-26 14:33:29.275987840 +0100
-@@ -20,40 +20,8 @@
- #define KVM_MMU_UNLOCK(kvm)		spin_unlock(&(kvm)->mmu_lock)
- #endif /* KVM_HAVE_MMU_RWLOCK */
++++ b/virt/kvm/kvm_mm.h	2024-12-28 11:16:28.894666700 +0100
+@@ -53,7 +53,8 @@ struct kvm_follow_pfn {
+ 	struct page **refcounted_page;
+ };
  
--
--struct kvm_follow_pfn {
--	const struct kvm_memory_slot *slot;
--	const gfn_t gfn;
--
--	unsigned long hva;
--
--	/* FOLL_* flags modifying lookup behavior, e.g. FOLL_WRITE. */
--	unsigned int flags;
--
--	/*
--	 * Pin the page (effectively FOLL_PIN, which is an mm/ internal flag).
--	 * The page *must* be pinned if KVM will write to the page via a kernel
--	 * mapping, e.g. via kmap(), mremap(), etc.
--	 */
--	bool pin;
--
--	/*
--	 * If non-NULL, try to get a writable mapping even for a read fault.
--	 * Set to true if a writable mapping was obtained.
--	 */
--	bool *map_writable;
--
--	/*
--	 * Optional output.  Set to a valid "struct page" if the returned pfn
--	 * is for a refcounted or pinned struct page, NULL if the returned pfn
--	 * has no struct page or if the struct page is not being refcounted
--	 * (e.g. tail pages of non-compound higher order allocations from
--	 * IO/PFNMAP mappings).
--	 */
--	struct page **refcounted_page;
--};
--
 -kvm_pfn_t hva_to_pfn(struct kvm_follow_pfn *kfp);
 +kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
 +		     bool *async, bool write_fault, bool *writable);
