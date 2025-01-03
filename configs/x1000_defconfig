@@ -237,8 +237,10 @@ CONFIG_TRACEPOINTS=y
 # Kexec and crash features
 #
 CONFIG_VMCORE_INFO=y
-# CONFIG_KEXEC is not set
+CONFIG_KEXEC_CORE=y
+CONFIG_KEXEC=y
 # CONFIG_KEXEC_FILE is not set
+# CONFIG_CRASH_DUMP is not set
 # end of Kexec and crash features
 # end of General setup
 
