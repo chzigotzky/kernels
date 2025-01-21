@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.13.0 Kernel Configuration
+# Linux/powerpc 6.14.0 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc64-suse-linux-gcc (SUSE Linux) 7.5.0"
 CONFIG_CC_IS_GCC=y
@@ -95,9 +95,11 @@ CONFIG_ARCH_WANT_DEFAULT_BPF_JIT=y
 # end of BPF subsystem
 
 CONFIG_PREEMPT_VOLUNTARY_BUILD=y
+CONFIG_ARCH_HAS_PREEMPT_LAZY=y
 # CONFIG_PREEMPT_NONE is not set
 CONFIG_PREEMPT_VOLUNTARY=y
 # CONFIG_PREEMPT is not set
+# CONFIG_PREEMPT_LAZY is not set
 
 #
 # CPU/Task time and stats accounting
@@ -1879,6 +1881,7 @@ CONFIG_PATA_SIL680=y
 CONFIG_MD=y
 CONFIG_BLK_DEV_MD=m
 CONFIG_MD_BITMAP_FILE=y
+# CONFIG_MD_LINEAR is not set
 CONFIG_MD_RAID0=m
 CONFIG_MD_RAID1=m
 CONFIG_MD_RAID10=m
