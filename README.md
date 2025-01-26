@@ -1,4 +1,4 @@
-Linux kernels for X1000 and e5500 PowerPC (X5000, QEMU etc) computers.
+Linux kernels for X1000 and e5500 (X5000, QEMU etc) PowerPC computers.
 
 Older Linux kernels and further downloads for X1000 and X5000 computers:
 
