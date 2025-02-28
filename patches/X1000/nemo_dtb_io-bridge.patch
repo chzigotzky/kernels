@@ -1,0 +1,12 @@
+--- a/arch/powerpc/kernel/prom_init.c	2025-02-23 21:32:57.000000000 +0100
++++ b/arch/powerpc/kernel/prom_init.c	2025-02-28 09:44:48.910328623 +0100
+@@ -3109,6 +3109,9 @@ static void __init fixup_device_tree_pas
+ 	prom_printf("Changing device_type of SB600 node...\n");
+ 
+ 	prom_setprop(iob, name, "device_type", "isa", sizeof("isa"));
++	prom_setprop(iob, NULL, "#address-cells", "3", sizeof(3));
++        prom_setprop(iob, NULL, "#size-cells", "2", sizeof(2));
++        prom_setprop(iob, NULL, "#interrupt-cells", "1", sizeof(1));
+ }
+ 
+ static void __init fixup_device_tree(void)
