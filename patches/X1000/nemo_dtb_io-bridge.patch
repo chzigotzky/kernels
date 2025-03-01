@@ -4,7 +4,7 @@
  	prom_printf("Changing device_type of SB600 node...\n");
  
  	prom_setprop(iob, name, "device_type", "isa", sizeof("isa"));
-+	u32 address_cells = 3, size_cells =2, interrupt_cells = 1;
++	u32 address_cells = 3, size_cells = 2, interrupt_cells = 1;
 +	prom_setprop(iob, name, "#address-cells", &address_cells, sizeof(u32));
 +	prom_setprop(iob, name, "#size-cells", &size_cells, sizeof(u32));
 +	prom_setprop(iob, name, "#interrupt-cells", &interrupt_cells, sizeof(u32));
