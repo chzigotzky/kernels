@@ -1,0 +1,13 @@
+--- a/arch/powerpc/kernel/prom_init.c	2025-03-13 13:02:20.000000000 +0100
++++ b/arch/powerpc/kernel/prom_init.c	2025-03-14 07:42:39.076307210 +0100
+@@ -3210,6 +3210,10 @@ static void __init fixup_device_tree_pas
+ 	prom_printf("Changing device_type of SB600 node...\n");
+ 
+ 	prom_setprop(iob, name, "device_type", "isa", sizeof("isa"));
++	u32 address_cells = 3, size_cells = 2, interrupt_cells = 1;
++	prom_setprop(iob, name, "#address-cells", &address_cells, sizeof(u32));
++	prom_setprop(iob, name, "#size-cells", &size_cells, sizeof(u32));
++	prom_setprop(iob, name, "#interrupt-cells", &interrupt_cells, sizeof(u32));
+ }
+ #else	/* !CONFIG_PPC_PASEMI_NEMO */
+ static inline void fixup_device_tree_pasemi(void) { }
