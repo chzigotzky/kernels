@@ -1,6 +1,6 @@
 diff -rupN a/arch/powerpc/platforms/pasemi/pci.c b/arch/powerpc/platforms/pasemi/pci.c
---- a/arch/powerpc/platforms/pasemi/pci.c	2023-09-04 08:16:52.967825331 +0200
-+++ b/arch/powerpc/platforms/pasemi/pci.c	2023-09-04 08:15:13.793207943 +0200
+--- a/arch/powerpc/platforms/pasemi/pci.c	2025-04-06 22:11:33.000000000 +0200
++++ b/arch/powerpc/platforms/pasemi/pci.c	2025-04-07 06:56:30.049314259 +0200
 @@ -25,6 +25,8 @@
  
  #define PA_PXP_CFA(bus, devfn, off) (((bus) << 20) | ((devfn) << 12) | (off))
@@ -23,8 +23,8 @@ diff -rupN a/arch/powerpc/platforms/pasemi/pci.c b/arch/powerpc/platforms/pasemi
  }
  
 diff -rupN a/arch/powerpc/platforms/pasemi/setup.c b/arch/powerpc/platforms/pasemi/setup.c
---- a/arch/powerpc/platforms/pasemi/setup.c	2023-09-04 08:16:52.967825331 +0200
-+++ b/arch/powerpc/platforms/pasemi/setup.c	2023-09-04 08:15:13.798207873 +0200
+--- a/arch/powerpc/platforms/pasemi/setup.c	2025-04-06 22:11:33.000000000 +0200
++++ b/arch/powerpc/platforms/pasemi/setup.c	2025-04-07 07:00:14.928469940 +0200
 @@ -214,10 +214,12 @@ static void sb600_8259_cascade(struct ir
  	chip->irq_eoi(&desc->irq_data);
  }
@@ -34,7 +34,7 @@ diff -rupN a/arch/powerpc/platforms/pasemi/setup.c b/arch/powerpc/platforms/pase
  {
  	struct device_node *np;
  	int gpio_virq;
-+	struct mpic *mpic;
++        struct mpic *mpic;
 +
  	/* Connect the SB600's legacy i8259 controller */
  	np = of_find_node_by_path("/pxp@0,e0000000");
@@ -44,7 +44,7 @@ diff -rupN a/arch/powerpc/platforms/pasemi/setup.c b/arch/powerpc/platforms/pase
  	mpic_unmask_irq(irq_get_irq_data(gpio_virq));
  
 +	mpic = irq_get_chip_data(gpio_virq);
- 	irq_set_default_host(mpic->irqhost);
+ 	irq_set_default_domain(mpic->irqhost);
  }
  
 @@ -298,8 +301,6 @@ static __init void pas_init_IRQ(void)
