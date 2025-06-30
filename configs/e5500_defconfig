@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.16.0-rc3 Kernel Configuration
+# Linux/powerpc 6.16.0-rc4 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc64-suse-linux-gcc (SUSE Linux) 11.5.0"
 CONFIG_CC_IS_GCC=y
@@ -6235,7 +6235,6 @@ CONFIG_SBITMAP=y
 # end of Library routines
 
 CONFIG_GENERIC_IOREMAP=y
-CONFIG_MIN_HEAP=y
 
 #
 # Kernel hacking
