@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.17.0-rc4 Kernel Configuration
+# Linux/powerpc 6.17.0-rc5 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc64-suse-linux-gcc (SUSE Linux) 11.5.0"
 CONFIG_CC_IS_GCC=y
@@ -2771,8 +2771,8 @@ CONFIG_PTP_1588_CLOCK_QORIQ=y
 # end of DPLL device support
 
 # CONFIG_PINCTRL is not set
-CONFIG_GPIOLIB=y
 CONFIG_GPIOLIB_LEGACY=y
+CONFIG_GPIOLIB=y
 CONFIG_GPIOLIB_FASTPATH_LIMIT=512
 CONFIG_OF_GPIO=y
 CONFIG_GPIOLIB_IRQCHIP=y
