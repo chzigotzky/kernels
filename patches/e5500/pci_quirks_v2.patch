@@ -13,7 +13,7 @@ diff -rupN a/drivers/pci/quirks.c b/drivers/pci/quirks.c
 +}
 +
 +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, PCI_ANY_ID, quirk_disable_aspm_all);
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_FSL, PCI_ANY_ID, quirk_disable_aspm_all);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_FREESCALE, PCI_ANY_ID, quirk_disable_aspm_all);
 +
  /*
   * Some Pericom PCIe-to-PCI bridges in reverse mode need the PCIe Retrain
