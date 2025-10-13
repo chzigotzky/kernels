@@ -1,0 +1,20 @@
+diff -rupN a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+--- a/drivers/pci/quirks.c	2025-10-12 22:42:36.000000000 +0200
++++ b/drivers/pci/quirks.c	2025-10-13 17:59:51.473097708 +0200
+@@ -2525,6 +2525,16 @@ static void quirk_disable_aspm_l0s_l1(st
+  */
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ASMEDIA, 0x1080, quirk_disable_aspm_l0s_l1);
+ 
++
++static void quirk_disable_aspm_all(struct pci_dev *dev)
++{
++       pci_info(dev, "Disabling ASPM\n");
++       pci_disable_link_state(dev, PCIE_LINK_STATE_ALL);
++}
++
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, PCI_ANY_ID, quirk_disable_aspm_all);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_FSL, PCI_ANY_ID, quirk_disable_aspm_all);
++
+ /*
+  * Some Pericom PCIe-to-PCI bridges in reverse mode need the PCIe Retrain
+  * Link bit cleared after starting the link retrain process to allow this
