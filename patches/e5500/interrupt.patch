@@ -1,0 +1,12 @@
+diff -rupN a/arch/powerpc/kernel/interrupt.c b/arch/powerpc/kernel/interrupt.c
+--- a/arch/powerpc/kernel/interrupt.c	2025-12-09 06:57:20.717347165 +0100
++++ b/arch/powerpc/kernel/interrupt.c	2025-12-09 10:24:37.357301725 +0100
+@@ -38,7 +38,7 @@ static inline bool exit_must_hard_disabl
+ #else
+ static inline bool exit_must_hard_disable(void)
+ {
+-	return false;
++	return true;
+ }
+ #endif
+ 
