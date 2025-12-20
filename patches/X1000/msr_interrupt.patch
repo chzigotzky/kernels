@@ -1,0 +1,101 @@
+diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm/hw_irq.h
+index 1078ba88efaf..9cd945f2acaf 100644
+--- a/arch/powerpc/include/asm/hw_irq.h
++++ b/arch/powerpc/include/asm/hw_irq.h
+@@ -90,7 +90,7 @@ static inline void __hard_EE_RI_disable(void)
+ 	if (IS_ENABLED(CONFIG_BOOKE))
+ 		wrtee(0);
+ 	else if (IS_ENABLED(CONFIG_PPC_8xx))
+-		wrtspr(SPRN_NRI);
++		wrtspr_sync(SPRN_NRI);
+ 	else if (IS_ENABLED(CONFIG_PPC_BOOK3S_64))
+ 		__mtmsrd(0, 1);
+ 	else
+diff --git a/arch/powerpc/include/asm/reg.h b/arch/powerpc/include/asm/reg.h
+index 3fe186635432..3449dd2b577d 100644
+--- a/arch/powerpc/include/asm/reg.h
++++ b/arch/powerpc/include/asm/reg.h
+@@ -1400,6 +1400,7 @@ static inline void mtmsr_isync(unsigned long val)
+ 				     : "r" ((unsigned long)(v)) \
+ 				     : "memory")
+ #define wrtspr(rn)	asm volatile("mtspr " __stringify(rn) ",2" : : : "memory")
++#define wrtspr_sync(rn)	asm volatile("mtspr " __stringify(rn) ",2; sync" : : : "memory")
+ 
+ static inline void wrtee(unsigned long val)
+ {
+diff --git a/arch/powerpc/kernel/entry_32.S b/arch/powerpc/kernel/entry_32.S
+index 16f8ee6cb2cd..d8426251b1cd 100644
+--- a/arch/powerpc/kernel/entry_32.S
++++ b/arch/powerpc/kernel/entry_32.S
+@@ -101,17 +101,6 @@ SYM_FUNC_END(__kuep_unlock)
+ .endm
+ #endif
+ 
+-.macro	clr_ri trash
+-#ifndef CONFIG_BOOKE
+-#ifdef CONFIG_PPC_8xx
+-	mtspr   SPRN_NRI, \trash
+-#else
+-	li	\trash, MSR_KERNEL & ~MSR_RI
+-	mtmsr	\trash
+-#endif
+-#endif
+-.endm
+-
+ 	.globl	transfer_to_syscall
+ transfer_to_syscall:
+ 	stw	r3, ORIG_GPR3(r1)
+@@ -160,7 +149,6 @@ ret_from_syscall:
+ 	cmpwi	r3,0
+ 	REST_GPR(3, r1)
+ syscall_exit_finish:
+-	clr_ri	r4
+ 	mtspr	SPRN_SRR0,r7
+ 	mtspr	SPRN_SRR1,r8
+ 
+@@ -237,7 +225,6 @@ fast_exception_return:
+ 	/* Clear the exception marker on the stack to avoid confusing stacktrace */
+ 	li	r10, 0
+ 	stw	r10, 8(r11)
+-	clr_ri	r10
+ 	mtspr	SPRN_SRR1,r9
+ 	mtspr	SPRN_SRR0,r12
+ 	REST_GPR(9, r11)
+@@ -270,7 +257,6 @@ interrupt_return:
+ .Lfast_user_interrupt_return:
+ 	lwz	r11,_NIP(r1)
+ 	lwz	r12,_MSR(r1)
+-	clr_ri	r4
+ 	mtspr	SPRN_SRR0,r11
+ 	mtspr	SPRN_SRR1,r12
+ 
+@@ -313,7 +299,6 @@ END_FTR_SECTION_IFSET(CPU_FTR_NEED_PAIRED_STWCX)
+ 	cmpwi	cr1,r3,0
+ 	lwz	r11,_NIP(r1)
+ 	lwz	r12,_MSR(r1)
+-	clr_ri	r4
+ 	mtspr	SPRN_SRR0,r11
+ 	mtspr	SPRN_SRR1,r12
+ 
+diff --git a/arch/powerpc/kernel/interrupt.c b/arch/powerpc/kernel/interrupt.c
+index aea6f7e8e9c6..e63bfde13e03 100644
+--- a/arch/powerpc/kernel/interrupt.c
++++ b/arch/powerpc/kernel/interrupt.c
+@@ -38,7 +38,7 @@ static inline bool exit_must_hard_disable(void)
+ #else
+ static inline bool exit_must_hard_disable(void)
+ {
+-	return false;
++	return true;
+ }
+ #endif
+ 
+@@ -443,6 +443,9 @@ notrace unsigned long interrupt_exit_kernel_prepare(struct pt_regs *regs)
+ 
+ 		if (unlikely(stack_store))
+ 			__hard_EE_RI_disable();
++#else
++	} else {
++		__hard_EE_RI_disable();
+ #endif /* CONFIG_PPC64 */
+ 	}
