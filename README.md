@@ -42,11 +42,12 @@ linux-firmware \
 kmod \
 libelf-dev \
 neofetch \
+wget \
 && update-alternatives --install /usr/bin/powerpc-linux-gnu-gcc powerpc-linux-gnu-gcc /usr/bin/powerpc-linux-gnu-gcc-9 10 \
 && update-alternatives --install /usr/bin/powerpc-linux-gnu-g++ powerpc-linux-gnu-g++ /usr/bin/powerpc-linux-gnu-g++-9 10 \
 && useradd -m -d /home/amigaone -p $(openssl passwd -1 --salt xyz amigaone) amigaone
 
-# Mount point in the container
+# A good directory for the volume mount point in the container
 WORKDIR /kernel_dev
 
 # Creating the volume on the host (directory on the host) 
