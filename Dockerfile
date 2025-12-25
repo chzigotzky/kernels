@@ -48,7 +48,16 @@ VOLUME ["/kernel_dev"]
 
 # Preparing kernel compilation
 RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.247.tar.xz" \
-&& export KERNEL_SRC_FILE="/kernel_dev/kernels/kernel_src.tar.xz" \
-&& export KERNEL_SRC_DEST="/kernel_dev/kernels/" \
+&& export KERNEL_SRC_FILE="/root/kernel_src.tar.xz" \
+&& export KERNEL_SRC_DEST="/root/" \
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
-&& tar xvf ${KERNEL_SRC_FILE} -C ${KERNEL_SRC_DEST} 
+&& tar xvf ${KERNEL_SRC_FILE} -C ${KERNEL_SRC_DEST}
+ 
+# docker build -t ubuntu_kernel_dev .
+# List all Docker containers: docker ps -a
+# Delete all Docker containers: docker rm $(docker ps -aq)
+# Delete all Docker images: docker rmi $(docker images -q)
+# Create a container and start it: docker run -t --name ubuntu_kernel_dev-container -v /kernel_dev:/kernel_dev ubuntu_kernel_dev &
+# Connect to a container: docker exec -it ubuntu_kernel_dev-container bash
+# Stop a docker container: docker stop <CONTAINER ID> (Changes remain in the image) 
+# Start a docker container: docker start <CONTAINER ID>  
