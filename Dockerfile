@@ -45,3 +45,10 @@ WORKDIR /kernel_dev
 
 # Creating the volume on the host (directory on the host) 
 VOLUME ["/kernel_dev"]
+
+# Preparing kernel compilation
+RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.247.tar.xz" \
+&& export KERNEL_SRC_FILE="/kernel_dev/kernels/kernel_src.tar.xz" \
+&& export KERNEL_SRC_DEST="/kernel_dev/kernels/" \
+&& wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
+&& tar xvf ${KERNEL_SRC_FILE} -C ${KERNEL_SRC_DEST} 
