@@ -25,6 +25,8 @@ libelf-dev \
 neofetch \
 wget \
 tree \
+ncat \
+sysstat \
 && update-alternatives --install /usr/bin/powerpc-linux-gnu-gcc powerpc-linux-gnu-gcc /usr/bin/powerpc-linux-gnu-gcc-9 10 \
 && update-alternatives --install /usr/bin/powerpc-linux-gnu-g++ powerpc-linux-gnu-g++ /usr/bin/powerpc-linux-gnu-g++-9 10 \
 && useradd -m -d /home/amigaone -p $(openssl passwd -1 --salt xyz amigaone) amigaone \
@@ -46,18 +48,22 @@ WORKDIR /kernel_dev
 # Creating the volume on the host (directory on the host) 
 VOLUME ["/kernel_dev"]
 
+COPY renesas_usb_fw.mem /lib/firmware/
+
 # Preparing kernel compilation
 RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.247.tar.xz" \
 && export KERNEL_SRC_FILE="/root/kernel_src.tar.xz" \
 && export KERNEL_SRC_DEST="/root/" \
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
 && tar xvf ${KERNEL_SRC_FILE} -C ${KERNEL_SRC_DEST}
+
+CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compiling of A-EON PowerPC Linux kernels works! $(uname -a) $(mpstat -P ALL)\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
  
 # docker build -t ubuntu_kernel_dev .
+# Create a container and start it (Container status: <HOSTNAME/FQDN/IP ADDRESS>:9090): docker run -d -p 9090:8080 --name ubuntu_kernel_dev-container -v /kernel_dev:/kernel_dev ubuntu_kernel_dev 
 # List all Docker containers: docker ps -a
-# Delete all Docker containers: docker rm $(docker ps -aq)
-# Delete all Docker images: docker rmi $(docker images -q)
-# Create a container and start it: docker run -t --name ubuntu_kernel_dev-container -v /kernel_dev:/kernel_dev ubuntu_kernel_dev &
 # Connect to a container: docker exec -it ubuntu_kernel_dev-container bash
 # Stop a docker container: docker stop <CONTAINER ID> (Changes remain in the image) 
 # Start a docker container: docker start <CONTAINER ID>  
+# Delete all Docker containers: docker rm $(docker ps -aq)
+# Delete all Docker images: docker rmi $(docker images -q)
