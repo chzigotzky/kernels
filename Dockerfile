@@ -59,6 +59,7 @@ RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5
 
 CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compiling of A-EON PowerPC Linux kernels works! $(uname -a) $(mpstat -P ALL)\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
  
+# sudo usermod -aG docker $USER
 # docker build -t ubuntu_kernel_dev .
 # Create a container and start it (Container status: <HOSTNAME/FQDN/IP ADDRESS>:9090): docker run -d -p 9090:8080 --name ubuntu_kernel_dev-container -v /kernel_dev:/kernel_dev ubuntu_kernel_dev 
 # List all Docker containers: docker ps -a
@@ -67,3 +68,19 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 # Start a docker container: docker start <CONTAINER ID>  
 # Delete all Docker containers: docker rm $(docker ps -aq)
 # Delete all Docker images: docker rmi $(docker images -q)
+#
+# Minikube (Kubernetes):
+#
+# minikube start
+# minikube image load ubuntu_kernel_dev:latest
+# minikube image ls
+# minikube mount /kernel_dev:/kernel_dev &
+# Deployment: kubectl apply -f Kubernetes.yaml
+# Check default namespace: kubectl get pods && kubectl get deployments && kubectl get services 
+# Check all namespaces: kubectl get pods -A && kubectl get deployments -A && kubectl get services -A 
+# kubectl port-forward <Name of the pod> 9090:8080 &
+# Connect to a pod: kubectl exec -it <Name of the pod> -- bash
+# Delete deployment: kubectl delete deployment kernel-dev 
+# Delete pod: kubectl delete pod <Name of the pod>
+# Delete service: kubectl delete service kernel-dev-service
+# minikube dashboard 
