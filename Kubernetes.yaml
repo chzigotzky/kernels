@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kernel-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kernel-dev
+  template:
+    metadata:
+      labels:
+        app: kernel-dev
+    spec:
+      containers:
+        - name: kernel-dev
+          image: docker.io/library/ubuntu_kernel_dev:latest 
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: kernel-dev-volume
+              mountPath: /kernel_dev
+      volumes:
+        - name: kernel-dev-volume
+          hostPath:
+            path: /kernel_dev
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kernel-dev-service
+spec:
+  type: NodePort
+  selector:
+    app: kernel-dev
+  ports:
+    - port: 9090 
+      targetPort: 8080 
+      protocol: TCP
+
