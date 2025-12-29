@@ -57,7 +57,7 @@ RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
 && tar xvf ${KERNEL_SRC_FILE} -C ${KERNEL_SRC_DEST}
 
-CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compiling of A-EON PowerPC Linux kernels works! $(uname -a) $(mpstat -P ALL)\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
+CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compiling of A-EON PowerPC Linux kernels works! $(uname -a) $(mpstat -P ALL 1 1)\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
  
 # sudo usermod -aG docker $USER
 # docker build -t ubuntu_kernel_dev .
