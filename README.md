@@ -64,8 +64,8 @@ sysstat \
 # A good directory for the volume mount point in the container
 WORKDIR /kernel_dev
 
-# Creating the volume on the host (directory on the host) 
-VOLUME ["/kernel_dev"]
+# Creating a volume (This has nothing to do with the mount (-v) in docker run.)
+# VOLUME ["/kernel_dev"]
 
 COPY renesas_usb_fw.mem /lib/firmware/
 
@@ -80,7 +80,8 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
  
 # sudo usermod -aG docker $USER
 # docker build -t ubuntu_kernel_dev .
-# Create a container and start it (Container status: <HOSTNAME/FQDN/IP ADDRESS>:9090): docker run -d -p 9090:8080 --name ubuntu_kernel_dev-container -v /kernel_dev:/kernel_dev ubuntu_kernel_dev 
+# Create a container and start it (Container status: <HOSTNAME/FQDN/IP ADDRESS>:9090): docker run -d -p 9090:8080 --name ubuntu_kernel_dev-container -v /kernel_dev:/kernel_dev ubuntu_kernel_dev
+# Volume mount explanation: -v /path/on/host:/path/in/container
 # List all Docker containers: docker ps -a
 # Connect to a container: docker exec -it ubuntu_kernel_dev-container bash
 # Stop a docker container: docker stop <CONTAINER ID> (Changes remain in the image) 
