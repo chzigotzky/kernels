@@ -67,7 +67,7 @@ WORKDIR /kernel_dev
 # Creating a volume (This has nothing to do with the mount (-v) in docker run.)
 # VOLUME ["/kernel_dev"]
 
-COPY renesas_usb_fw.mem /lib/firmware/
+COPY firmwares/renesas_usb_fw.mem /lib/firmware/
 
 # Preparing kernel compilation
 RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.247.tar.xz" \
@@ -104,4 +104,5 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 # Delete pod: kubectl delete pod <Name of the pod>
 # Delete service: kubectl delete service kernel-dev-service
 # minikube dashboard
+
 ```
