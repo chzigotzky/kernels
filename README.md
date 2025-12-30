@@ -14,7 +14,7 @@ User Name: tabor
 
 Password: amigaone
 
-Dockerfile for a PowerPC cross compiling environment:
+Dockerfile for a PowerPC cross compiling environment (docker build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#main):
 
 ```
 # Base image: Ubuntu 20.04
