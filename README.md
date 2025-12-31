@@ -20,7 +20,7 @@ Dockerfile for a PowerPC cross compiling environment (docker build -t ubuntu_ker
 # Base image: Ubuntu 20.04
 FROM ubuntu:20.04
 
-# Deactive interactive inputs
+# Deactivate interactive inputs
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Upgrading the userland and installing the kernel cross compiling environment 
