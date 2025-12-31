@@ -48,10 +48,10 @@ WORKDIR /kernel_dev
 # Creating a volume (This has nothing to do with the mount (-v) in docker run.)
 # VOLUME ["/kernel_dev"]
 
-COPY renesas_usb_fw.mem /lib/firmware/
+COPY firmwares/renesas_usb_fw.mem /lib/firmware/
 
 # Preparing kernel compilation
-RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.247.tar.xz" \
+RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.63.tar.xz" \
 && export KERNEL_SRC_FILE="/root/kernel_src.tar.xz" \
 && export KERNEL_SRC_DEST="/root/" \
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
