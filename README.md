@@ -106,5 +106,5 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 # minikube dashboard
 ```
 
-<img width="1600" height="1200" alt="Docker_container_cross_compiling_PPC_Linux_kernels" src="https://github.com/user-attachments/assets/ca119836-1cd7-410d-b5e4-611b912f88a8" />
+<img width="1600" height="1200" alt="Dockerfile_for_a_Linux_PPC_cross_compiling_image" src="https://github.com/user-attachments/assets/3b2c96de-e4d6-4f57-9fe3-9bdc9c5b26d6" />
 
