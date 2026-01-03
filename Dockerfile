@@ -27,6 +27,7 @@ wget \
 tree \
 ncat \
 sysstat \
+cpufetch \
 && update-alternatives --install /usr/bin/powerpc-linux-gnu-gcc powerpc-linux-gnu-gcc /usr/bin/powerpc-linux-gnu-gcc-9 10 \
 && update-alternatives --install /usr/bin/powerpc-linux-gnu-g++ powerpc-linux-gnu-g++ /usr/bin/powerpc-linux-gnu-g++-9 10 \
 && useradd -m -d /home/amigaone -p $(openssl passwd -1 --salt xyz amigaone) amigaone \
@@ -51,7 +52,7 @@ WORKDIR /kernel_dev
 COPY firmwares/renesas_usb_fw.mem /lib/firmware/
 
 # Preparing kernel compilation
-RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.63.tar.xz" \
+RUN export KERNEL_SRC_LINK="https://git.kernel.org/torvalds/t/linux-6.19-rc3.tar.gz" \
 && export KERNEL_SRC_FILE="/root/kernel_src.tar.xz" \
 && export KERNEL_SRC_DEST="/root/" \
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
@@ -60,7 +61,9 @@ RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6
 CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compiling of A-EON PowerPC Linux kernels works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
  
 # sudo usermod -aG docker $USER
-# docker build -t ubuntu_kernel_dev .
+# Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_dev .
+# From git: docker build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#main
+# From git with buildx: docker buildx build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#main
 # Create a container and start it (Container status: <HOSTNAME/FQDN/IP ADDRESS>:9090): docker run -d -p 9090:8080 --name ubuntu_kernel_dev-container -v /kernel_dev:/kernel_dev ubuntu_kernel_dev
 # Volume mount explanation: -v /path/on/host:/path/in/container
 # List all Docker containers: docker ps -a
