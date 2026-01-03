@@ -21,7 +21,7 @@ Clone this git repository with branches:
 3. git branch --track 5_10 origin/5_10
 4. git branch --track 6_12 origin/6_12
 
-Using the Dockerfile for the Linux PPC cross compiling environment:
+Using the Dockerfile for building the Linux PPC cross compiling image:
 
 Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_dev .
 
