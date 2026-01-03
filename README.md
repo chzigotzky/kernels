@@ -24,7 +24,9 @@ Clone this git repository with branches:
 Using the Dockerfile for the Linux PPC cross compiling environment:
 
 Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_dev .
+
 From git: docker build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#main
+
 From git with buildx: docker buildx build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#main
 
 Dockerfile:
