@@ -139,3 +139,7 @@ Monitoring the Docker container while compiling the kernel:
 
 <img width="1600" height="1200" alt="Dockerfile_for_a_Linux_PPC_cross_compiling_image" src="https://github.com/user-attachments/assets/3b2c96de-e4d6-4f57-9fe3-9bdc9c5b26d6" />
 
+Testing the Linux PPC kernel in a Docker container:
+
+<img width="1280" height="1024" alt="Linux_PPC_kernel_test_docker_image" src="https://github.com/user-attachments/assets/74e4e291-ff2b-4617-ae02-434b48f47fc0" />
+
