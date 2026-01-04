@@ -31,8 +31,7 @@ qemu-system-ppc \
 # A good directory for the volume mount point in the container
 WORKDIR /kernel_dev
 
-CMD ["sh", "-c", "service xrdp start"]
-CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the A-EON PowerPC Linux kernel test works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
+CMD ["sh", "-c", "service xrdp start && while true; do BODY=\"The Docker container for the A-EON PowerPC Linux kernel test works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
  
 # sudo usermod -aG docker $USER
 # For testing: docker run -it -p 9080:3389 --name ubuntu_kernel_test-container -v /kernel_dev:/kernel_dev ubuntu:25.10
