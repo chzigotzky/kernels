@@ -29,7 +29,15 @@ From git: docker build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernel
 
 From git with buildx: docker buildx build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#main
 
-Dockerfile:
+Using the Dockerfile_kernel_test for the Linux PPC kernel test image:
+
+Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_test -f Dockerfile_kernel_test .
+
+From git: docker build -t ubuntu_kernel_test -f Dockerfile_kernel_test https://github.com/chzigotzky/kernels.git#main
+
+From git with buildx: docker buildx build -t ubuntu_kernel_test -f Dockerfile_kernel_test https://github.com/chzigotzky/kernels.git#main
+
+Dockerfile for building the Linux PPC cross compiling image:
 
 ```
 # Base image: Ubuntu 20.04
