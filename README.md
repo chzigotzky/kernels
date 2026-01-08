@@ -116,7 +116,7 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 #
 # Minikube (Kubernetes):
 #
-# minikube start
+# minikube start --cpus=16 --memory=48123
 # minikube image load ubuntu_kernel_dev:latest
 # minikube image ls
 # minikube mount /kernel_dev:/kernel_dev &
