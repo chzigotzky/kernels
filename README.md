@@ -128,6 +128,8 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 # Delete deployment: kubectl delete deployment kernel-dev 
 # Delete pod: kubectl delete pod <Name of the pod>
 # Delete service: kubectl delete service kernel-dev-service
+# minikube image ls
+# minikube image remove <image:tag>
 # minikube dashboard
 ```
 
