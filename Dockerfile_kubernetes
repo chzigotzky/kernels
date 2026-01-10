@@ -57,7 +57,7 @@ RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
 && tar xvf ${KERNEL_SRC_FILE} -C ${KERNEL_SRC_DEST}
 
-CMD ["sh", "-c", "while true; do BODY=\"The Kubernetes container with 2 another replicas for the cross compiling of A-EON PowerPC Linux kernels works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
+CMD ["sh", "-c", "while true; do BODY=\"The Kubernetes pod with 2 another replicas for the cross compiling of A-EON PowerPC Linux kernels works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
  
 # sudo usermod -aG docker $USER
 # Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_dev -f Dockerfile_kubernetes .
