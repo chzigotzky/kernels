@@ -144,7 +144,7 @@ Monitoring the Docker container while compiling the kernel:
 
 Monitoring the Kubernetes pod while compiling the kernel:
 
-<img width="1600" height="1200" alt="Kernel_6 12 64_PowerPC" src="https://github.com/user-attachments/assets/f6e7e8ed-5d6b-42a8-aa60-563cabf4895e" />
+<img width="1600" height="1200" alt="Kernel_6 12 64_PowerPC" src="https://github.com/user-attachments/assets/4e555bf4-f934-4ad2-a6dd-47df6815c29a" />
 
 Testing the Linux PPC kernel in a Docker container:
 
