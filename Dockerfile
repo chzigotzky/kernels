@@ -80,10 +80,13 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 # minikube mount /kernel_dev:/kernel_dev &
 # Deployment: kubectl apply -f Kubernetes.yaml
 # Check default namespace: kubectl get pods && kubectl get deployments && kubectl get services 
-# Check all namespaces: kubectl get pods -A && kubectl get deployments -A && kubectl get services -A 
-# kubectl port-forward <Name of the pod> 9090:8080 &
+# Check all namespaces: kubectl get pods -A && kubectl get deployments -A && kubectl get services -A
+# Check LoadBalancer: kubectl get services 
+# kubectl port-forward <Name of the pod> 9090:8080 & or kubectl proxy and http://localhost:8001/api/v1/namespaces/default/services/kernel-dev-service:9090/proxy/
 # Connect to a pod: kubectl exec -it <Name of the pod> -- bash
 # Delete deployment: kubectl delete deployment kernel-dev 
 # Delete pod: kubectl delete pod <Name of the pod>
 # Delete service: kubectl delete service kernel-dev-service
+# minikube image ls
+# minikube image remove <image:tag>
 # minikube dashboard
