@@ -25,9 +25,9 @@ Using the Dockerfile for building the Linux PPC cross compiling image:
 
 Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_dev .
 
-From git: docker build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#main
+From git: docker build -t ubuntu_kernel_dev [https://github.com/chzigotzky/kernels.git#main](https://github.com/chzigotzky/kernels.git#6_12)
 
-From git with buildx: docker buildx build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#main
+From git with buildx: docker buildx build -t ubuntu_kernel_dev [https://github.com/chzigotzky/kernels.git#main](https://github.com/chzigotzky/kernels.git#6_12)
 
 Dockerfile:
 
@@ -133,4 +133,9 @@ Building the image:
 Monitoring the Docker container while compiling the kernel:
 
 <img width="1600" height="1200" alt="Dockerfile_for_a_Linux_PPC_cross_compiling_image" src="https://github.com/user-attachments/assets/3b2c96de-e4d6-4f57-9fe3-9bdc9c5b26d6" />
+
+Monitoring the Kubernetes pod while compiling the kernel:
+
+<img width="1600" height="1200" alt="Kernel_6 12 64_PowerPC" src="https://github.com/user-attachments/assets/7cea02a4-fb4b-47e3-98cc-e173759f3f2f" />
+
 
