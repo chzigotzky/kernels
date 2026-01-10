@@ -32,7 +32,7 @@ kind: Service
 metadata:
   name: kernel-dev-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: kernel-dev
   ports:
