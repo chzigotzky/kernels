@@ -25,9 +25,9 @@ Using the Dockerfile for building the Linux PPC cross compiling image:
 
 Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_dev .
 
-From git: docker build -t ubuntu_kernel_dev [https://github.com/chzigotzky/kernels.git#main](https://github.com/chzigotzky/kernels.git#6_12)
+From git: docker build -t ubuntu_kernel_dev [https://github.com/chzigotzky/kernels.git#6_12](https://github.com/chzigotzky/kernels.git#6_12)
 
-From git with buildx: docker buildx build -t ubuntu_kernel_dev [https://github.com/chzigotzky/kernels.git#main](https://github.com/chzigotzky/kernels.git#6_12)
+From git with buildx: docker buildx build -t ubuntu_kernel_dev [https://github.com/chzigotzky/kernels.git#6_12](https://github.com/chzigotzky/kernels.git#6_12)
 
 Dockerfile:
 
