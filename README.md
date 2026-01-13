@@ -37,6 +37,12 @@ From git: docker build -t ubuntu_kernel_test -f Dockerfile_kernel_test https://g
 
 From git with buildx: docker buildx build -t ubuntu_kernel_test -f Dockerfile_kernel_test https://github.com/chzigotzky/kernels.git#main
 
+Network between ubuntu_kernel_dev and ubuntu_kernel_test:
+
+1. docker network create my-network
+2. docker run -d -p 9090:8080 --name ubuntu_kernel_dev-container --network my-network -v /kernel_dev:/kernel_dev ubuntu_kernel_dev
+3. docker run -d -p 9080:3389 -p 9091:8080 --name ubuntu_kernel_test-container --network my-network -v /kernel_dev:/kernel_dev ubuntu_kernel_test
+
 Dockerfile for building the Linux PPC cross compiling image:
 
 ```
