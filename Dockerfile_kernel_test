@@ -1,0 +1,50 @@
+# Base image: Ubuntu 25.10
+FROM ubuntu:25.10
+
+# Deactivate interactive inputs
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Upgrading the userland and installing the PowerPC kernel test environment 
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+bash \
+vim \
+git \
+curl \
+wget \
+tree \
+xrdp \
+cpufetch \
+fastfetch \
+ncat \
+sysstat \
+xrdp \
+tigervnc-standalone-server \
+tigervnc-common \
+fvwm3 \
+qemu-system-ppc \
+openssh-server \
+&& useradd -m -d /home/amigaone -p $(openssl passwd -1 --salt xyz amigaone) amigaone \
+&& sed -i '/^\[Xorg\]/,/^\[/{/^\[/!d;/^\[Xorg\]/d}' /etc/xrdp/xrdp.ini \
+&& echo "qemu-system-ppc64 -M ppce500 -cpu e5500 -m 8192 -kernel linux-image-6.19.0-rc3-X1000_e5500/e5500/uImage-6.19 -drive format=raw,file=void-live-powerpc-20230317.img,index=0,if=virtio -append "root=/dev/vda" -smp 4 -netdev user,id=mynet0 -device virtio-net,netdev=mynet0 -device virtio-mouse-pci -device virtio-keyboard-pci -device virtio-gpu-pci" >> /home/amigaone/.bash_history \
+&& echo "exec fvwm3" > /etc/xrdp/startwm.sh \ 
+&& chmod 777 /etc/xrdp/startwm.sh 
+
+# A good directory for the volume mount point in the container
+WORKDIR /kernel_dev
+
+CMD ["sh", "-c", "service xrdp start && service ssh start && while true; do BODY=\"The Docker container for the A-EON PowerPC Linux kernel test works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
+ 
+# sudo usermod -aG docker $USER
+# For testing: docker run -it -p 9080:3389 --name ubuntu_kernel_test-container -v /kernel_dev:/kernel_dev ubuntu:25.10
+# Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_test -f Dockerfile_kernel_test .
+# From git: docker build -t ubuntu_kernel_test -f Dockerfile_kernel_test https://github.com/chzigotzky/kernels.git#main
+# From git with buildx: docker buildx build -t ubuntu_kernel_test -f Dockerfile_kernel_test https://github.com/chzigotzky/kernels.git#main
+# Create a container and start it (Container status: <HOSTNAME/FQDN/IP ADDRESS>:9090): docker run -d -p 9080:3389 -p 9090:8080 --name ubuntu_kernel_test-container -v /kernel_dev:/kernel_dev ubuntu_kernel_test 
+# Volume mount explanation: -v /path/on/host:/path/in/container
+# List all Docker containers: docker ps -a
+# Connect to a container: docker exec -it ubuntu_kernel_test-container bash
+# Stop a docker container: docker stop <CONTAINER ID> (Changes remain in the image) 
+# Start a docker container: docker start <CONTAINER ID>  
+# Delete all Docker containers: docker rm $(docker ps -aq)
+# Delete all Docker images: docker rmi $(docker images -q)
+# Higher desktop resolution: xrandr --size 1280x1024
