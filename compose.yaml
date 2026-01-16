@@ -1,0 +1,48 @@
+services:
+  ubuntu_kernel_dev: # This will be used as the hostname
+    image: ubuntu_kernel_dev
+    container_name: ubuntu_kernel_dev-container
+    build:
+      context: https://github.com/chzigotzky/kernels.git#6_12
+    ports:
+      - 9090:8080
+    volumes:
+      - /kernel_dev:/kernel_dev
+
+  ubuntu_kernel_test: # This will be used as the hostname
+    image: ubuntu_kernel_test
+    container_name: ubuntu_kernel_test-container
+    build:
+      context: https://github.com/chzigotzky/kernels.git#6_12
+      dockerfile: Dockerfile_kernel_test
+    ports:
+      - 9080:3389
+      - 9091:8080
+    volumes:
+      - /kernel_dev:/kernel_dev
+
+# volumes:
+#   kernel-dev:
+
+# key: value
+#
+# array:
+#   - value1
+#   - value2
+#   - value3
+#
+# array:
+#   - key1: value 
+#     key2: value
+#   - key1: value
+#     key2: value
+#
+# name: &variable value
+# variable2: *variable
+#
+# docker compose up -d --build (--build deletes also the cache)
+# docker compose up ubuntu_kernel_dev -d --build
+# docker compose up ubuntu_kernel_test -d --build
+# docker compose down
+# docker compose stop
+# docker compose start
