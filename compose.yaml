@@ -3,7 +3,7 @@ services:
     image: ubuntu_kernel_dev
     container_name: ubuntu_kernel_dev-container
     build:
-      context: https://github.com/chzigotzky/kernels.git#6_12
+      context: https://github.com/chzigotzky/kernels.git#main
     ports:
       - 9090:8080
     volumes:
@@ -13,7 +13,7 @@ services:
     image: ubuntu_kernel_test
     container_name: ubuntu_kernel_test-container
     build:
-      context: https://github.com/chzigotzky/kernels.git#6_12
+      context: https://github.com/chzigotzky/kernels.git#main
       dockerfile: Dockerfile_kernel_test
     ports:
       - 9080:3389
