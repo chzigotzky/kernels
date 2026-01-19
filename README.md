@@ -99,7 +99,7 @@ WORKDIR /kernel_dev
 COPY firmwares/renesas_usb_fw.mem /lib/firmware/
 
 # Preparing kernel compilation
-RUN export KERNEL_SRC_LINK="https://git.kernel.org/torvalds/t/linux-6.19-rc3.tar.gz" \
+RUN export KERNEL_SRC_LINK="https://git.kernel.org/torvalds/t/linux-6.19-rc6.tar.gz" \
 && export KERNEL_SRC_FILE="/root/kernel_src.tar.xz" \
 && export KERNEL_SRC_DEST="/root/" \
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
@@ -151,6 +151,10 @@ Monitoring the Docker container while compiling the kernel:
 Monitoring the Kubernetes pod while compiling the kernel:
 
 <img width="1600" height="1200" alt="Kernel_6 12 64_PowerPC" src="https://github.com/user-attachments/assets/4e555bf4-f934-4ad2-a6dd-47df6815c29a" />
+
+Monitoring the Docker containers in Portainer while compiling the kernel for e5500 machines (1600% = 16 CPU cores fully utilized):
+
+<img width="1600" height="1200" alt="Kernel_6 12 65_PowerPC-2" src="https://github.com/user-attachments/assets/8e761f73-6617-4be8-bca1-15383efa8bf1" />
 
 Testing the Linux PPC kernel in a Docker container:
 
