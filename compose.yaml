@@ -4,6 +4,8 @@ services:
     container_name: local-registry
     ports:
       - "5000:5000"
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
 
   ubuntu_kernel_dev:
     image: localhost:5000/ubuntu_kernel_dev
@@ -50,6 +52,12 @@ services:
 #
 # docker compose up -d --build (--build deletes also the cache)
 # docker compose push (Push the images to the local registry)
+# curl http://localhost:5000/v2/_catalog (Display the images in the local registry)
+# Delete the images in the local registry:
+# 1. curl -I -H "Accept: application/vnd.docker.distribution.manifest.v2+json" http://localhost:5000/v2/ubuntu_kernel_dev/manifests/latest
+# 2. curl -X DELETE http://localhost:5000/v2/ubuntu_kernel_dev/manifests/sha256:2c48b82b92dfcb3425346605ec1d2e1b24b3d7cd9c23474f92c843886dc04908
+# 3. curl -I -H "Accept: application/vnd.docker.distribution.manifest.v2+json" http://localhost:5000/v2/ubuntu_kernel_test/manifests/latest
+# 4. curl -X DELETE http://localhost:5000/v2/ubuntu_kernel_test/manifests/sha256:cd1734b46224c237f456c2603c612fbceb368df9acd2379986c7016cb3e3ca0e
 # docker compose up ubuntu_kernel_dev -d --build
 # docker compose up ubuntu_kernel_test -d --build
 # docker compose down
