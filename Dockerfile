@@ -51,7 +51,7 @@ WORKDIR /kernel_dev
 COPY firmwares/renesas_usb_fw.mem /lib/firmware/
 
 # Preparing kernel compilation
-RUN export KERNEL_SRC_LINK="https://git.kernel.org/torvalds/t/linux-6.19-rc6.tar.gz" \
+RUN export KERNEL_SRC_LINK="https://git.kernel.org/torvalds/t/linux-6.19-rc7.tar.gz" \
 && export KERNEL_SRC_FILE="/root/kernel_src.tar.xz" \
 && export KERNEL_SRC_DEST="/root/" \
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
