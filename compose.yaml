@@ -1,25 +1,35 @@
 services:
-  ubuntu_kernel_dev: # This will be used as the hostname
-    image: ubuntu_kernel_dev
-    container_name: ubuntu_kernel_dev-container
+  registry:
+    image: registry:2
+    container_name: local-registry
+    ports:
+      - "5000:5000"
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
+
+  ubuntu_kernel_dev:
+    image: localhost:5000/ubuntu_kernel_dev
     build:
       context: https://github.com/chzigotzky/kernels.git#main
     ports:
-      - 9090:8080
+      - "9090:8080"
     volumes:
       - /kernel_dev:/kernel_dev
+    depends_on:
+      - registry
 
-  ubuntu_kernel_test: # This will be used as the hostname
-    image: ubuntu_kernel_test
-    container_name: ubuntu_kernel_test-container
+  ubuntu_kernel_test:
+    image: localhost:5000/ubuntu_kernel_test
     build:
       context: https://github.com/chzigotzky/kernels.git#main
       dockerfile: Dockerfile_kernel_test
     ports:
-      - 9080:3389
-      - 9091:8080
+      - "9080:3389"
+      - "9091:8080"
     volumes:
       - /kernel_dev:/kernel_dev
+    depends_on:
+      - registry
 
 # volumes:
 #   kernel-dev:
@@ -32,7 +42,7 @@ services:
 #   - value3
 #
 # array:
-#   - key1: value 
+#   - key1: value
 #     key2: value
 #   - key1: value
 #     key2: value
@@ -41,6 +51,26 @@ services:
 # variable2: *variable
 #
 # docker compose up -d --build (--build deletes also the cache)
+# docker compose push (Push the images to the local registry)
+# curl http://localhost:5000/v2/_catalog (Display the images in the local registry)
+# Delete the images in the local registry:
+# 1. curl -I -H "Accept: application/vnd.docker.distribution.manifest.v2+json" http://localhost:5000/v2/ubuntu_kernel_dev/manifests/latest
+# 2. curl -v -X DELETE http://localhost:5000/v2/ubuntu_kernel_dev/manifests/sha256:2c48b82b92dfcb3425346605ec1d2e1b24b3d7cd9c23474f92c843886dc04908
+# 3. curl -I -H "Accept: application/vnd.docker.distribution.manifest.v2+json" http://localhost:5000/v2/ubuntu_kernel_test/manifests/latest
+# 4. curl -v -X DELETE http://localhost:5000/v2/ubuntu_kernel_test/manifests/sha256:cd1734b46224c237f456c2603c612fbceb368df9acd2379986c7016cb3e3ca0e
+# 5. docker stop 0fdbe98a995c (0fdbe98a995c = docker ps -a)
+# 6. docker inspect 0fdbe98a995c | grep -A5 Mounts (Preparation for garbage collection. 0fdbe98a995c = docker ps -a)
+# 7. docker run --rm -v 92afd1a447b82021ba729c0c7b624c34caba84f91bdda37ad57b0ae38d16031e:/var/lib/registry registry:2 garbage-collect /etc/docker/registry/config.yml
+# 8. docker start 0fdbe98a995c
+# Delete the complete local registry volume:
+# 1. docker ps -a
+# 2. docker stop f352821ed760
+# 3. docker inspect f352821ed760 | grep -A5 Mounts
+# 4. docker volume ls
+# 5. docker rm f352821ed760
+# 6. docker volume rm 0a3510ae1c236f3fc856f403b3a411446a7ad4a880da879b25fc3f3b68c2e1b0
+# 7. Recreating the local registry: docker compose up -d --build
+# 8. docker compose push
 # docker compose up ubuntu_kernel_dev -d --build
 # docker compose up ubuntu_kernel_test -d --build
 # docker compose down
