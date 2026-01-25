@@ -1,0 +1,15 @@
+services:
+  ubuntu_kernel_dev:
+    image: localhost:5000/ubuntu_kernel_dev
+    ports:
+      - "9090:8080"
+    volumes:
+      - /kernel_dev:/kernel_dev
+
+  ubuntu_kernel_test:
+    image: localhost:5000/ubuntu_kernel_test
+    ports:
+      - "9080:3389"
+      - "9091:8080"
+    volumes:
+      - /kernel_dev:/kernel_dev
