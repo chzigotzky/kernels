@@ -1,6 +1,11 @@
 services:
   ubuntu_kernel_dev:
     image: 192.168.178.43:5000/ubuntu_kernel_dev
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == buildhost 
     ports:
       - "9090:8080"
     volumes:
