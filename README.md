@@ -156,9 +156,9 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 #
 ```
 
-Building the image:
+Building the images with Docker compose:
 
-<img width="1920" height="1022" alt="docker_buildx" src="https://github.com/user-attachments/assets/81af644f-03df-4fc1-80ba-5d60927fa684" />
+<img width="1920" height="1080" alt="Docker_compose_with_local_registry" src="https://github.com/user-attachments/assets/4479cb76-d07e-4397-b1e8-aaa39a469233" />
 
 Monitoring the Docker container while compiling the kernel:
 
