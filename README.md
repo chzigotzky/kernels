@@ -99,7 +99,7 @@ WORKDIR /kernel_dev
 COPY firmwares/renesas_usb_fw.mem /lib/firmware/
 
 # Preparing kernel compilation
-RUN export KERNEL_SRC_LINK="https://git.kernel.org/torvalds/t/linux-6.19-rc7.tar.gz" \
+RUN export KERNEL_SRC_LINK="https://git.kernel.org/torvalds/t/linux-6.19-rc8.tar.gz" \
 && export KERNEL_SRC_FILE="/root/kernel_src.tar.xz" \
 && export KERNEL_SRC_DEST="/root/" \
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
@@ -119,6 +119,20 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 # Start a docker container: docker start <CONTAINER ID>  
 # Delete all Docker containers: docker rm $(docker ps -aq)
 # Delete all Docker images: docker rmi $(docker images -q)
+#
+# With Docker compose:
+#
+# docker compose up -d --build (In the directory where the compose.yaml file is located. --build deletes also the cache)
+# docker compose push (Push the images to the local registry)
+# curl http://localhost:5000/v2/_catalog (Display the images in the local registry)
+#
+# Delete the complete local registry volume:
+# docker ps -a
+# docker stop f352821ed760
+# docker inspect f352821ed760 | grep -A5 Mounts
+# docker volume ls
+# docker rm f352821ed760
+# docker volume rm 0a3510ae1c236f3fc856f403b3a411446a7ad4a880da879b25fc3f3b68c2e1b0
 #
 # Minikube (Kubernetes):
 #
