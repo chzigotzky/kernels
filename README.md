@@ -43,6 +43,40 @@ Network between ubuntu_kernel_dev and ubuntu_kernel_test:
 2. docker run -d -p 9090:8080 --name ubuntu_kernel_dev-container --network my-network -v /kernel_dev:/kernel_dev ubuntu_kernel_dev
 3. docker run -d -p 9080:3389 -p 9091:8080 --name ubuntu_kernel_test-container --network my-network -v /kernel_dev:/kernel_dev ubuntu_kernel_test
 
+With Docker compose:
+
+1. docker compose up -d --build (In the directory where the compose.yaml file is located. --build deletes also the cache)
+2. docker compose push (Push the images to the local registry)
+3. curl http://localhost:5000/v2/_catalog (Display the images in the local registry)
+
+Delete the complete local registry volume:
+
+1. docker ps -a
+2. docker stop f352821ed760
+3. docker inspect f352821ed760 | grep -A5 Mounts
+4. docker volume ls
+5. docker rm f352821ed760
+6. docker volume rm 0a3510ae1c236f3fc856f403b3a411446a7ad4a880da879b25fc3f3b68c2e1b0
+
+Minikube (Kubernetes):
+
+1. minikube start
+2. minikube image load ubuntu_kernel_dev:latest
+3. minikube image ls
+4. minikube mount /kernel_dev:/kernel_dev &
+5. Deployment: kubectl apply -f Kubernetes.yaml
+6. Check default namespace: kubectl get pods && kubectl get deployments && kubectl get services 
+7. Check all namespaces: kubectl get pods -A && kubectl get deployments -A && kubectl get services -A
+8. Check LoadBalancer: kubectl get services 
+9. kubectl port-forward <Name of the pod> 9090:8080 & or kubectl proxy --address='0.0.0.0' --accept-hosts='^.*$' and http://<IP ADDRESS>:8001/api/v1/namespaces/default/services/kernel-dev-service:9090/proxy/
+10. Connect to a pod: kubectl exec -it <Name of the pod> -- bash
+11. Delete deployment: kubectl delete deployment kernel-dev 
+12. Delete pod: kubectl delete pod <Name of the pod>
+13. Delete service: kubectl delete service kernel-dev-service
+14. minikube image ls
+15. minikube image remove <image:tag>
+16. minikube dashboard
+
 Dockerfile for building the Linux PPC cross compiling image:
 
 ```
@@ -120,38 +154,6 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 # Delete all Docker containers: docker rm $(docker ps -aq)
 # Delete all Docker images: docker rmi $(docker images -q)
 #
-# With Docker compose:
-#
-# docker compose up -d --build (In the directory where the compose.yaml file is located. --build deletes also the cache)
-# docker compose push (Push the images to the local registry)
-# curl http://localhost:5000/v2/_catalog (Display the images in the local registry)
-#
-# Delete the complete local registry volume:
-# docker ps -a
-# docker stop f352821ed760
-# docker inspect f352821ed760 | grep -A5 Mounts
-# docker volume ls
-# docker rm f352821ed760
-# docker volume rm 0a3510ae1c236f3fc856f403b3a411446a7ad4a880da879b25fc3f3b68c2e1b0
-#
-# Minikube (Kubernetes):
-#
-# minikube start
-# minikube image load ubuntu_kernel_dev:latest
-# minikube image ls
-# minikube mount /kernel_dev:/kernel_dev &
-# Deployment: kubectl apply -f Kubernetes.yaml
-# Check default namespace: kubectl get pods && kubectl get deployments && kubectl get services 
-# Check all namespaces: kubectl get pods -A && kubectl get deployments -A && kubectl get services -A
-# Check LoadBalancer: kubectl get services 
-# kubectl port-forward <Name of the pod> 9090:8080 & or kubectl proxy --address='0.0.0.0' --accept-hosts='^.*$' and http://<IP ADDRESS>:8001/api/v1/namespaces/default/services/kernel-dev-service:9090/proxy/
-# Connect to a pod: kubectl exec -it <Name of the pod> -- bash
-# Delete deployment: kubectl delete deployment kernel-dev 
-# Delete pod: kubectl delete pod <Name of the pod>
-# Delete service: kubectl delete service kernel-dev-service
-# minikube image ls
-# minikube image remove <image:tag>
-# minikube dashboard
 ```
 
 Building the image:
