@@ -162,6 +162,10 @@ Monitoring the Docker container while compiling the kernel:
 
 <img width="1600" height="1200" alt="Dockerfile_for_a_Linux_PPC_cross_compiling_image" src="https://github.com/user-attachments/assets/3b2c96de-e4d6-4f57-9fe3-9bdc9c5b26d6" />
 
+Monitoring the Docker containers while compiling and testing the kernel (Docker Swarm):
+
+<img width="1600" height="1200" alt="Kernel_6 12 67_PowerPC" src="https://github.com/user-attachments/assets/a91291aa-0587-46b7-9613-6fc5b2df24e2" />
+
 Monitoring the Kubernetes pod while compiling the kernel:
 
 <img width="1600" height="1200" alt="Kernel_6 12 64_PowerPC" src="https://github.com/user-attachments/assets/4e555bf4-f934-4ad2-a6dd-47df6815c29a" />
