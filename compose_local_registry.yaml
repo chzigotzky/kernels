@@ -5,11 +5,11 @@ services:
       replicas: 1
       placement:
         constraints:
-          - node.hostname == buildhost 
+          - node.hostname == buildhost
     ports:
       - "9090:8080"
     volumes:
-      - /kernel_dev:/kernel_dev
+      - sshfs_kernel:/kernel_dev
 
   ubuntu_kernel_test:
     image: 192.168.178.43:5000/ubuntu_kernel_test
@@ -17,7 +17,14 @@ services:
       - "9080:3389"
       - "9091:8080"
     volumes:
-      - /kernel_dev:/kernel_dev
+      - sshfs_kernel:/kernel_dev
+
+volumes:
+  sshfs_kernel:
+    driver: vieux/sshfs
+    driver_opts:
+      sshcmd: "amigaone@192.168.178.43:/kernel_dev"
+      password: "<my_password>"
 
 # cat /etc/docker/daemon.json
 # {
@@ -25,3 +32,7 @@ services:
 # }
 #
 # sudo systemctl restart docker
+#
+# docker plugin install vieux/sshfs
+#
+# docker plugin ls
