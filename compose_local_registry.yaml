@@ -9,7 +9,7 @@ services:
     ports:
       - "9090:8080"
     volumes:
-      - sshfs_kernel:/kernel_dev
+      - /kernel_dev:/kernel_dev
 
   ubuntu_kernel_test:
     image: 192.168.178.43:5000/ubuntu_kernel_test
