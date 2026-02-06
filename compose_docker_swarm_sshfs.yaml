@@ -37,7 +37,7 @@ volumes:
 #
 # docker swarm init --advertise-addr 192.168.178.123
 #
-# ssh christian@192.168.178.43 "docker swarm join --token SWMTKN-1-1vptb25gf6bkb9pmxectrpucdmpy2mi7ug5qlam0raqp1tkr11-ca1bdrftyl87bu8r5jb4b48n6 192.168.178.123:2377"
+# ssh christian@192.168.178.43 "docker swarm join --token <TOKEN> 192.168.178.123:2377"
 #
 # docker node ls
 #
