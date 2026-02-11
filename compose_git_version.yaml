@@ -1,7 +1,20 @@
 services:
+  portainer:
+    image: localhost:5000/portainer-ce:latest
+    build:
+      context: https://github.com/chzigotzky/kernels.git#main
+      dockerfile: Dockerfile_portainer
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
   registry:
-    image: registry:2
-    container_name: local-registry
+    image: localhost:5000/registry:2
+    build:
+      context: https://github.com/chzigotzky/kernels.git#main
+      dockerfile: Dockerfile_registry
     ports:
       - "5000:5000"
     environment:
@@ -31,6 +44,9 @@ services:
       - /kernel_dev:/kernel_dev
     depends_on:
       - registry
+
+volumes:
+  portainer_data:
 
 # volumes:
 #   kernel-dev:
