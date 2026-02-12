@@ -1,0 +1,76 @@
+services:
+  ubuntu_kernel_dev:
+    image: 192.168.178.43:5000/ubuntu_kernel_dev
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == buildhost
+    ports:
+      - "9090:8080"
+    volumes:
+      - /kernel_dev:/kernel_dev
+
+  ubuntu_kernel_test:
+    image: 192.168.178.43:5000/ubuntu_kernel_test
+    ports:
+      - "9080:3389"
+      - "9091:8080"
+    volumes:
+      - sshfs_kernel:/kernel_dev
+
+  portainer:
+    image: 192.168.178.43:5000/portainer-ce
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == docker-manager-node 
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:
+  sshfs_kernel:
+    driver: vieux/sshfs
+    driver_opts:
+      sshcmd: "christian@192.168.178.43:/kernel_dev"
+      password: "<password>"
+
+# cat /etc/docker/daemon.json
+# {
+#  "insecure-registries": ["192.168.178.43:5000"]
+# }
+#
+# sudo systemctl restart docker
+#
+# Docker Swarm:
+#
+# docker swarm init --advertise-addr 192.168.178.123
+#
+# ssh christian@192.168.178.43 "docker swarm join --token <TOKEN> 192.168.178.123:2377"
+#
+# docker node ls
+#
+# docker plugin install vieux/sshfs
+#
+# sudo systemctl restart docker
+#
+# docker plugin ls
+#
+# docker stack deploy -c compose.yaml mystack
+#
+# docker stack ps mystack
+#
+# docker ps -a
+#
+# docker exec -it 115198cda715 bash
+#
+# Worker: docker swarm leave
+#
+# Manager: docker swarm leave --force
+#
