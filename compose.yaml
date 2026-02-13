@@ -1,6 +1,7 @@
 services:
   portainer:
     image: localhost:5000/portainer-ce:latest
+    restart: unless-stopped
     build:
       context: https://github.com/chzigotzky/kernels.git#main
       dockerfile: Dockerfile_portainer
