@@ -25,7 +25,7 @@ qemu-system-ppc \
 openssh-server \
 && useradd -m -d /home/amigaone -p $(openssl passwd -1 --salt xyz amigaone) amigaone \
 && sed -i '/^\[Xorg\]/,/^\[/{/^\[/!d;/^\[Xorg\]/d}' /etc/xrdp/xrdp.ini \
-&& echo "qemu-system-ppc64 -M ppce500 -cpu e5500 -m 4096 -kernel linux-image-7.0-alpha1-X1000_e5500/e5500/uImage-7.0 -drive format=raw,file=void-live-powerpc-20230317.img,index=0,if=virtio -append "root=/dev/vda" -smp 4 -netdev user,id=mynet0 -device virtio-net,netdev=mynet0 -device virtio-mouse-pci -device virtio-keyboard-pci -device virtio-gpu-pci" >> /home/amigaone/.bash_history \
+&& echo "qemu-system-ppc64 -M ppce500 -cpu e5500 -m 4096 -kernel linux-image-7.0-alpha3-X1000_e5500/e5500/uImage-7.0 -drive format=raw,file=void-live-powerpc-20230317.img,index=0,if=virtio -append "root=/dev/vda" -smp 4 -netdev user,id=mynet0 -device virtio-net,netdev=mynet0 -device virtio-mouse-pci -device virtio-keyboard-pci -device virtio-gpu-pci" >> /home/amigaone/.bash_history \
 && echo "exec fvwm3" > /etc/xrdp/startwm.sh \ 
 && chmod 777 /etc/xrdp/startwm.sh 
 
