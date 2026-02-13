@@ -13,6 +13,8 @@ services:
 
   ubuntu_kernel_test:
     image: 192.168.178.43:5000/ubuntu_kernel_test
+    deploy:
+      replicas: 1
     ports:
       - "9080:3389"
       - "9091:8080"
@@ -22,6 +24,8 @@ services:
   portainer:
     image: 192.168.178.43:5000/portainer-ce
     deploy:
+      restart_policy:
+        condition: unless-stopped
       replicas: 1
       placement:
         constraints:
