@@ -68,10 +68,10 @@ Minikube (Kubernetes):
 6. Check default namespace: kubectl get pods && kubectl get deployments && kubectl get services 
 7. Check all namespaces: kubectl get pods -A && kubectl get deployments -A && kubectl get services -A
 8. Check LoadBalancer: kubectl get services 
-9. kubectl port-forward <Name of the pod> 9090:8080 & or kubectl proxy --address='0.0.0.0' --accept-hosts='^.*$' and http://<IP ADDRESS>:8001/api/v1/namespaces/default/services/kernel-dev-service:9090/proxy/
-10. Connect to a pod: kubectl exec -it <Name of the pod> -- bash
+9. kubectl port-forward Name_of_the_pod 9090:8080 & or kubectl proxy --address='0.0.0.0' --accept-hosts='^.*$' and http://<IP ADDRESS>:8001/api/v1/namespaces/default/services/kernel-dev-service:9090/proxy/
+10. Connect to a pod: kubectl exec -it Name_of_the_pod -- bash
 11. Delete deployment: kubectl delete deployment kernel-dev 
-12. Delete pod: kubectl delete pod <Name of the pod>
+12. Delete pod: kubectl delete pod Name_of_the_pod
 13. Delete service: kubectl delete service kernel-dev-service
 14. minikube image ls
 15. minikube image remove <image:tag>
