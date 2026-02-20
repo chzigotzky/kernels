@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kernel-dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kernel-dev
+  template:
+    metadata:
+      labels:
+        app: kernel-dev
+    spec:
+      containers:
+        - name: kernel-dev
+          image: 192.168.178.43:5000/ubuntu_kernel_dev:latest
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: kernel-dev-volume
+              mountPath: /kernel_dev
+      volumes:
+        - name: kernel-dev-volume
+          hostPath:
+            path: /kernel_dev
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kernel-dev-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: kernel-dev
+  ports:
+    - port: 9090 
+      targetPort: 8080 
+      protocol: TCP
+
+For the access to the local registry on all nodes:
+
+cat /etc/containerd/config.toml | grep config_path:
+
+config_path = "/etc/containerd/certs.d"
+
+cat /etc/containerd/certs.d/192.168.178.43:5000/hosts.toml:
+
+server = "http://192.168.178.43:5000"
+
+[host."http://192.168.178.43:5000"]
+  capabilities = ["pull", "resolve", "push"]
