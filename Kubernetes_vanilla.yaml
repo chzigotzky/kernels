@@ -39,15 +39,15 @@ spec:
       targetPort: 8080 
       protocol: TCP
 
-For the access to the local registry on all nodes:
-
-cat /etc/containerd/config.toml | grep config_path:
-
-config_path = "/etc/containerd/certs.d"
-
-cat /etc/containerd/certs.d/192.168.178.43:5000/hosts.toml:
-
-server = "http://192.168.178.43:5000"
-
-[host."http://192.168.178.43:5000"]
-  capabilities = ["pull", "resolve", "push"]
+# For the access to the local registry on all nodes:
+# 
+# cat /etc/containerd/config.toml | grep config_path:
+# 
+# config_path = "/etc/containerd/certs.d"
+# 
+# cat /etc/containerd/certs.d/192.168.178.43:5000/hosts.toml:
+# 
+# server = "http://192.168.178.43:5000"
+# 
+# [host."http://192.168.178.43:5000"]
+#  capabilities = ["pull", "resolve", "push"]
