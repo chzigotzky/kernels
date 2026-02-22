@@ -31,7 +31,7 @@ kind: Deployment
 metadata:
   name: kernel-test
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: kernel-test
@@ -73,17 +73,19 @@ kind: Service
 metadata:
   name: kernel-test-service
 spec:
-  type: LoadBalancer
+  type: NodePort 
   selector:
     app: kernel-test
   ports:
     - name: http
-      port: 9091 
-      targetPort: 8080 
+      port: 8081 
+      targetPort: 8080
+      nodePort: 9091 
       protocol: TCP
     - name: rdp
-      port: 9080 
-      targetPort: 3389 
+      port: 3390 
+      targetPort: 3389
+      nodePort: 9080 
       protocol: TCP
 
 # For the access to the local registry on all nodes:
