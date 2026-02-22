@@ -16,7 +16,7 @@ spec:
         - name: kernel-dev
           image: 192.168.178.43:5000/ubuntu_kernel_dev:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 9090
           volumeMounts:
             - name: kernel-dev-volume
               mountPath: /kernel_dev
@@ -44,8 +44,8 @@ spec:
         - name: kernel-test
           image: 192.168.178.43:5000/ubuntu_kernel_test:latest
           ports:
-            - containerPort: 8080
-            - containerPort: 3389 
+            - containerPort: 9091
+            - containerPort: 9080 
           volumeMounts:
             - name: kernel-dev-volume
               mountPath: /kernel_dev
