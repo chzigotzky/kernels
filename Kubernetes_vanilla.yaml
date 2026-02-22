@@ -16,7 +16,36 @@ spec:
         - name: kernel-dev
           image: 192.168.178.43:5000/ubuntu_kernel_dev:latest
           ports:
-            - containerPort: 9090
+            - containerPort: 8080
+          volumeMounts:
+            - name: kernel-dev-volume
+              mountPath: /kernel_dev
+      volumes:
+        - name: kernel-dev-volume
+          hostPath:
+            path: /kernel_dev
+            type: DirectoryOrCreate
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kernel-test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kernel-test
+  template:
+    metadata:
+      labels:
+        app: kernel-test
+    spec:
+      containers:
+        - name: kernel-test
+          image: 192.168.178.43:5000/ubuntu_kernel_test:latest
+          ports:
+            - containerPort: 8080
+            - containerPort: 3389 
           volumeMounts:
             - name: kernel-dev-volume
               mountPath: /kernel_dev
@@ -37,6 +66,22 @@ spec:
   ports:
     - port: 9090 
       targetPort: 8080 
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kernel-test-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: kernel-test
+  ports:
+    - port: 9091 
+      targetPort: 8080 
+      protocol: TCP
+    - port: 9080 
+      targetPort: 3389 
       protocol: TCP
 
 # For the access to the local registry on all nodes:
