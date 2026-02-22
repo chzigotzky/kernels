@@ -78,14 +78,14 @@ spec:
     app: kernel-test
   ports:
     - name: http
-      port: 8081 
+      port: 9091 
       targetPort: 8080
-      nodePort: 9091 
+      nodePort: 30000
       protocol: TCP
     - name: rdp
-      port: 3390 
+      port: 9080 
       targetPort: 3389
-      nodePort: 9080 
+      nodePort: 30001 
       protocol: TCP
 
 # For the access to the local registry on all nodes:
