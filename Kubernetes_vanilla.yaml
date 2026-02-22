@@ -50,4 +50,4 @@ spec:
 # server = "http://192.168.178.43:5000"
 # 
 # [host."http://192.168.178.43:5000"]
-#  capabilities = ["pull", "resolve", "push"]
+#   capabilities = ["pull", "resolve", "push"]
