@@ -44,8 +44,8 @@ spec:
         - name: kernel-test
           image: 192.168.178.43:5000/ubuntu_kernel_test:latest
           ports:
-            - containerPort: 9091
-            - containerPort: 9080 
+            - containerPort: 8080 
+            - containerPort: 3389 
           volumeMounts:
             - name: kernel-dev-volume
               mountPath: /kernel_dev
