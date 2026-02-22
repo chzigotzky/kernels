@@ -77,10 +77,12 @@ spec:
   selector:
     app: kernel-test
   ports:
-    - port: 9091 
+    - name: http
+      port: 9091 
       targetPort: 8080 
       protocol: TCP
-    - port: 9080 
+    - name: rdp
+      port: 9080 
       targetPort: 3389 
       protocol: TCP
 
