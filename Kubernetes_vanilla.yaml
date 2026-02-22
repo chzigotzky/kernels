@@ -96,3 +96,11 @@ spec:
 # 
 # [host."http://192.168.178.43:5000"]
 #   capabilities = ["pull", "resolve", "push"]
+#
+# Deployment: kubectl apply -f Kubernetes_vanilla.yaml
+#
+# Check default namespace: kubectl get pods -o wide && kubectl get deployments && kubectl get services
+#
+# Pod check on the worker node: crictl pods
+#
+# kubectl proxy --address='0.0.0.0' --accept-hosts='^.*$' and http://<IP ADDRESS>:8001/api/v1/namespaces/default/services/kernel-dev-service:9090/proxy/
