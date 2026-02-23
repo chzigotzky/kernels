@@ -108,3 +108,8 @@ spec:
 # Pod check on the worker node: crictl pods
 #
 # kubectl proxy --address='0.0.0.0' --accept-hosts='^.*$' and http://<IP ADDRESS>:8001/api/v1/namespaces/default/services/kernel-dev-service:9090/proxy/
+#
+# targetPort: 8080 = Port of the application in the container 
+# port: 9091 = Service port of the cluster (load balancing / round robin) 
+# nodePort: 30000 = External port from the node. Kubernetes forwards the traffic: nodePort (30000) -> service port (9091) -> pod targetPort (8080)
+# route: URL -> service port (You don't need the nodePort)
