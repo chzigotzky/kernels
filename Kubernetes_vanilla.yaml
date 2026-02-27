@@ -15,8 +15,9 @@ spec:
       containers:
         - name: kernel-dev
           image: 192.168.178.43:5000/ubuntu_kernel_dev:latest
+          command: ["sh", "-c", "while true; do BODY=\"The Kubernetes pod with 2 another replicas for the cross compiling of A-EON PowerPC Linux kernels works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
           ports:
-            - containerPort: 9090
+            - containerPort: 8080
           volumeMounts:
             - name: kernel-dev-volume
               mountPath: /kernel_dev
@@ -43,6 +44,7 @@ spec:
       containers:
         - name: kernel-test
           image: 192.168.178.43:5000/ubuntu_kernel_test:latest
+          command: ["sh", "-c", "while true; do BODY=\"The Kubernetes pod for testing the A-EON PowerPC Linux kernels works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
           ports:
             - containerPort: 8080 
             - containerPort: 3389 
