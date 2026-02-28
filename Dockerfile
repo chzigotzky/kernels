@@ -51,11 +51,11 @@ WORKDIR /kernel_dev
 COPY firmwares/renesas_usb_fw.mem /lib/firmware/
 
 # Preparing kernel compilation
-RUN export KERNEL_SRC_LINK="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/snapshot/linux-6.19.tar.gz" \
-&& export KERNEL_SRC_FILE="/root/kernel_src.tar.xz" \
+RUN export KERNEL_SRC_LINK="https://git.kernel.org/torvalds/t/linux-7.0-rc2.tar.gz" \
+&& export KERNEL_SRC_FILE="/root/kernel_src.tar.gz" \
 && export KERNEL_SRC_DEST="/root/" \
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
-&& tar xvf ${KERNEL_SRC_FILE} -C ${KERNEL_SRC_DEST}
+&& tar zxvf ${KERNEL_SRC_FILE} -C ${KERNEL_SRC_DEST}
 
 CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compiling of A-EON PowerPC Linux kernels works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
  
