@@ -62,7 +62,7 @@ kind: Service
 metadata:
   name: kernel-dev-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: kernel-dev
   ports:
@@ -89,6 +89,23 @@ spec:
       targetPort: 3389
       nodePort: 30001 
       protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kernel-dev-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kernel-dev-service
+                port:
+                  number: 9090
 
 # For the access to the local registry on all nodes:
 # 
@@ -115,3 +132,5 @@ spec:
 # port: 9091 = Service port of the cluster (load balancing / round robin) 
 # nodePort: 30000 = External port from the node. Kubernetes forwards the traffic: nodePort (30000) -> service port (9091) -> pod targetPort (8080)
 # route: URL -> service (You don't need the nodePort)
+# You need to install the NGiNX Ingress Controller for ingress: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+# Check if ingress works: kubectl get pods -n ingress-nginx
