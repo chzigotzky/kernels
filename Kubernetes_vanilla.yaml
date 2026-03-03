@@ -106,6 +106,21 @@ spec:
                 name: kernel-dev-service
                 port:
                   number: 9090
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.178.240-192.168.178.250
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
 
 # For the access to the local registry on all nodes:
 # 
@@ -134,3 +149,5 @@ spec:
 # route: URL -> service (You don't need the nodePort)
 # You need to install the NGiNX Ingress Controller for ingress: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
 # Check if ingress works: kubectl get pods -n ingress-nginx
+# You need to install MetalLB for bare metal Kubernetes cluster: kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+# Check if MetalLB works: kubectl get pods -n metallb-system
