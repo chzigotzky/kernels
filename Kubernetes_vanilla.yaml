@@ -28,7 +28,7 @@ spec:
             type: DirectoryOrCreate
 ---
 apiVersion: v1
-kind: secret
+kind: Secret
 metadata:
   name: root-password
 type: Opaque
