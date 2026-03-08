@@ -50,6 +50,7 @@ spec:
       labels:
         app: kernel-test
     spec:
+      nodeName: worker02 
       containers:
         - name: kernel-test
           image: 192.168.178.43:5000/ubuntu_kernel_test:latest
