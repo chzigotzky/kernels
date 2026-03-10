@@ -30,17 +30,17 @@ sysstat \
 && update-alternatives --install /usr/bin/powerpc-linux-gnu-gcc powerpc-linux-gnu-gcc /usr/bin/powerpc-linux-gnu-gcc-9 10 \
 && update-alternatives --install /usr/bin/powerpc-linux-gnu-g++ powerpc-linux-gnu-g++ /usr/bin/powerpc-linux-gnu-g++-9 10 \
 && useradd -m -d /home/amigaone -p $(openssl passwd -1 --salt xyz amigaone) amigaone \
-&& echo "patch -p0 <" >> /home/amigaone/.bash_history \
-&& echo "nproc" >> /home/amigaone/.bash_history \
-&& echo "make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc oldconfig" >> /home/amigaone/.bash_history \
-&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc vmlinux" >> /home/amigaone/.bash_history \
-&& echo "make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc zImage" >> /home/amigaone/.bash_history \
-&& echo "gzip -9 vmlinux.strip" >> /home/amigaone/.bash_history \
-&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules" >> /home/amigaone/.bash_history \
-&& echo "# make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules_install" >> /home/amigaone/.bash_history \
-&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc uImage" >> /home/amigaone/.bash_history \
-&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules" >> /home/amigaone/.bash_history \
-&& echo "# make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules_install" >> /home/amigaone/.bash_history
+&& echo "patch -p0 <" >> /root/.bash_history \
+&& echo "nproc" >> /root/.bash_history \
+&& echo "make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc oldconfig" >> /root/.bash_history \
+&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc vmlinux" >> /root/.bash_history \
+&& echo "make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc zImage" >> /root/.bash_history \
+&& echo "gzip -9 vmlinux.strip" >> /root/.bash_history \
+&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules" >> /root/.bash_history \
+&& echo "# make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules_install" >> /root/.bash_history \
+&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc uImage" >> /root/.bash_history \
+&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules" >> /root/.bash_history \
+&& echo "# make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules_install" >> /root/.bash_history
 
 # A good directory for the volume mount point in the container
 WORKDIR /kernel_dev
@@ -51,7 +51,7 @@ WORKDIR /kernel_dev
 COPY firmwares/renesas_usb_fw.mem /lib/firmware/
 
 # Preparing kernel compilation
-RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.76.tar.xz" \
+RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.77.tar.xz" \
 && export KERNEL_SRC_FILE="/root/kernel_src.tar.xz" \
 && export KERNEL_SRC_DEST="/root/" \
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
