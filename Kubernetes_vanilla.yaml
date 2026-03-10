@@ -36,6 +36,32 @@ type: Opaque
 data:
   password: cm9vdA==
 ---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv
+spec:
+  capacity:
+    storage: 1Ti
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 192.168.178.43
+    path: /kernels
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti
+  volumeName: nfs-pv
+--- 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -65,13 +91,12 @@ spec:
             - containerPort: 8080 
             - containerPort: 3389 
           volumeMounts:
-            - name: kernel-dev-volume
-              mountPath: /kernel_dev
+            - name: kernels
+              mountPath: /kernels
       volumes:
-        - name: kernel-dev-volume
-          hostPath:
-            path: /kernel_dev
-            type: DirectoryOrCreate
+        - name: kernels
+          persistentVolumeClaim:
+            claimName: nfs-pvc  
 ---
 apiVersion: v1
 kind: Service
