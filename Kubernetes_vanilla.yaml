@@ -12,6 +12,7 @@ spec:
       labels:
         app: kernel-dev
     spec:
+      nodeName: worker02
       containers:
         - name: kernel-dev
           image: 192.168.178.43:5000/ubuntu_kernel_dev:latest
@@ -49,6 +50,7 @@ spec:
       labels:
         app: kernel-test
     spec:
+      nodeName: buildhost
       containers:
         - name: kernel-test
           image: 192.168.178.43:5000/ubuntu_kernel_test:latest
