@@ -30,17 +30,17 @@ sysstat \
 && update-alternatives --install /usr/bin/powerpc-linux-gnu-gcc powerpc-linux-gnu-gcc /usr/bin/powerpc-linux-gnu-gcc-9 10 \
 && update-alternatives --install /usr/bin/powerpc-linux-gnu-g++ powerpc-linux-gnu-g++ /usr/bin/powerpc-linux-gnu-g++-9 10 \
 && useradd -m -d /home/amigaone -p $(openssl passwd -1 --salt xyz amigaone) amigaone \
-&& echo "patch -p0 <" >> /home/amigaone/.bash_history \
-&& echo "nproc" >> /home/amigaone/.bash_history \
-&& echo "make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc oldconfig" >> /home/amigaone/.bash_history \
-&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc vmlinux" >> /home/amigaone/.bash_history \
-&& echo "make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc zImage" >> /home/amigaone/.bash_history \
-&& echo "gzip -9 vmlinux.strip" >> /home/amigaone/.bash_history \
-&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules" >> /home/amigaone/.bash_history \
-&& echo "# make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules_install" >> /home/amigaone/.bash_history \
-&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc uImage" >> /home/amigaone/.bash_history \
-&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules" >> /home/amigaone/.bash_history \
-&& echo "# make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules_install" >> /home/amigaone/.bash_history
+&& echo "patch -p0 <" >> /root/.bash_history \
+&& echo "nproc" >> /root/.bash_history \
+&& echo "make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc oldconfig" >> /root/.bash_history \
+&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc vmlinux" >> /root/.bash_history \
+&& echo "make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc zImage" >> /root/.bash_history \
+&& echo "gzip -9 vmlinux.strip" >> /root/.bash_history \
+&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules" >> /root/.bash_history \
+&& echo "# make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules_install" >> /root/.bash_history \
+&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc uImage" >> /root/.bash_history \
+&& echo "time make -j$(nproc) CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules" >> /root/.bash_history \
+&& echo "# make CROSS_COMPILE=powerpc-linux-gnu- ARCH=powerpc modules_install" >> /root/.bash_history
 
 # A good directory for the volume mount point in the container
 WORKDIR /kernel_dev
@@ -51,18 +51,18 @@ WORKDIR /kernel_dev
 COPY firmwares/renesas_usb_fw.mem /lib/firmware/
 
 # Preparing kernel compilation
-RUN export KERNEL_SRC_LINK="https://git.kernel.org/torvalds/t/linux-6.19-rc3.tar.gz" \
+RUN export KERNEL_SRC_LINK="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.252.tar.xz" \
 && export KERNEL_SRC_FILE="/root/kernel_src.tar.xz" \
 && export KERNEL_SRC_DEST="/root/" \
 && wget -O ${KERNEL_SRC_FILE} ${KERNEL_SRC_LINK} \
 && tar xvf ${KERNEL_SRC_FILE} -C ${KERNEL_SRC_DEST}
 
 CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compiling of A-EON PowerPC Linux kernels works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
- 
+
 # sudo usermod -aG docker $USER
 # Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_dev .
-# From git: docker build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#main
-# From git with buildx: docker buildx build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#main
+# From git: docker build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#6_12
+# From git with buildx: docker buildx build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#6_12 
 # Create a container and start it (Container status: <HOSTNAME/FQDN/IP ADDRESS>:9090): docker run -d -p 9090:8080 --name ubuntu_kernel_dev-container -v /kernel_dev:/kernel_dev ubuntu_kernel_dev
 # Volume mount explanation: -v /path/on/host:/path/in/container
 # List all Docker containers: docker ps -a
@@ -80,10 +80,13 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 # minikube mount /kernel_dev:/kernel_dev &
 # Deployment: kubectl apply -f Kubernetes.yaml
 # Check default namespace: kubectl get pods && kubectl get deployments && kubectl get services 
-# Check all namespaces: kubectl get pods -A && kubectl get deployments -A && kubectl get services -A 
-# kubectl port-forward <Name of the pod> 9090:8080 &
+# Check all namespaces: kubectl get pods -A && kubectl get deployments -A && kubectl get services -A
+# Check LoadBalancer: kubectl get services 
+# kubectl port-forward <Name of the pod> 9090:8080 & or kubectl proxy --address='0.0.0.0' --accept-hosts='^.*$' and http://<IP ADDRESS>:8001/api/v1/namespaces/default/services/kernel-dev-service:9090/proxy/
 # Connect to a pod: kubectl exec -it <Name of the pod> -- bash
 # Delete deployment: kubectl delete deployment kernel-dev 
 # Delete pod: kubectl delete pod <Name of the pod>
 # Delete service: kubectl delete service kernel-dev-service
-# minikube dashboard 
+# minikube image ls
+# minikube image remove <image:tag>
+# minikube dashboard

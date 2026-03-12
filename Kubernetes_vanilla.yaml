@@ -1,0 +1,195 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv
+spec:
+  capacity:
+    storage: 1Ti
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 192.168.178.43
+    path: /kernels
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti
+  volumeName: nfs-pv
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kernel-dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kernel-dev
+  template:
+    metadata:
+      labels:
+        app: kernel-dev
+    spec:
+      nodeName: worker02
+      containers:
+        - name: kernel-dev
+          image: 192.168.178.43:5000/ubuntu_kernel_dev:latest
+          command: ["sh", "-c", "while true; do BODY=\"The Kubernetes pod with 2 another replicas for the cross compiling of A-EON PowerPC Linux kernels works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+           - name: kernels
+             mountPath: /kernels 
+      volumes:
+        - name: kernels
+          persistentVolumeClaim:
+            claimName: nfs-pvc
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: root-password
+type: Opaque
+data:
+  password: cm9vdA==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kernel-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kernel-test
+  template:
+    metadata:
+      labels:
+        app: kernel-test
+    spec:
+      nodeName: buildhost
+      containers:
+        - name: kernel-test
+          image: 192.168.178.43:5000/ubuntu_kernel_test:latest
+          env:
+          - name: ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: root-password
+                key: password
+          command: ["sh", "-c", "echo root:$ROOT_PASSWORD | chpasswd && service xrdp start && service ssh start && while true; do BODY=\"The Kubernetes pod for testing the A-EON PowerPC Linux kernels works!\n\n$(uname -a)\n\n$(free -m)\n\n$(lscpu | grep Model)\n\n$(LC_ALL=C mpstat -P ALL 1 1 | awk '$0 !~ /Average/ && $0 ~ /[0-9]+/ && $NF ~ /^[0-9.]+$/ { cpu=$(NF-10); if (cpu ~ /^[0-9]+$/) printf \"CPU%s: %.1f%%\\n\", cpu, 100-$NF }')\"; { printf \"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nContent-Length: %s\\r\\nConnection: close\\r\\n\\r\\n%s\" \"${#BODY}\" \"$BODY\"; } | nc -l -p 8080; done"]
+          ports:
+            - containerPort: 8080 
+            - containerPort: 3389 
+          volumeMounts:
+            - name: kernel-dev-volume
+              mountPath: /kernel_dev
+      volumes:
+        - name: kernel-dev-volume
+          hostPath:
+            path: /kernel_dev
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kernel-dev-service
+spec:
+  type: ClusterIP
+  selector:
+    app: kernel-dev
+  ports:
+    - port: 9090 
+      targetPort: 8080 
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kernel-test-service
+spec:
+  type: NodePort 
+  selector:
+    app: kernel-test
+  ports:
+    - name: http
+      port: 9091 
+      targetPort: 8080
+      nodePort: 30000
+      protocol: TCP
+    - name: rdp
+      port: 9080 
+      targetPort: 3389
+      nodePort: 30001 
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kernel-dev-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kernel-dev-service
+                port:
+                  number: 9090
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.178.240-192.168.178.250
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
+
+# For the access to the local registry on all nodes:
+# 
+# cat /etc/containerd/config.toml | grep config_path:
+# 
+# config_path = "/etc/containerd/certs.d"
+# 
+# cat /etc/containerd/certs.d/192.168.178.43:5000/hosts.toml:
+# 
+# server = "http://192.168.178.43:5000"
+# 
+# [host."http://192.168.178.43:5000"]
+#   capabilities = ["pull", "resolve", "push"]
+#
+# Deployment: kubectl apply -f Kubernetes_vanilla.yaml
+#
+# Check default namespace: kubectl get pods -o wide && kubectl get deployments && kubectl get services
+#
+# Pod check on the worker node: crictl pods
+#
+# kubectl proxy --address='0.0.0.0' --accept-hosts='^.*$' and http://<IP ADDRESS>:8001/api/v1/namespaces/default/services/kernel-dev-service:9090/proxy/
+#
+# targetPort: 8080 = Port of the application in the container 
+# port: 9091 = Service port of the cluster (load balancing / round robin) 
+# nodePort: 30000 = External port from the node. Kubernetes forwards the traffic: nodePort (30000) -> service port (9091) -> pod targetPort (8080)
+# route: URL -> service (You don't need the nodePort)
+# You need to install the NGiNX Ingress Controller for ingress: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+# Check if ingress works: kubectl get pods -n ingress-nginx
+# You need to install MetalLB for bare metal Kubernetes cluster: kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+# Check if MetalLB works: kubectl get pods -n metallb-system
