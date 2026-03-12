@@ -38,8 +38,8 @@ CMD ["sh", "-c", "service xrdp start && service ssh start && while true; do BODY
 # sudo usermod -aG docker $USER
 # For testing: docker run -it -p 9080:3389 --name ubuntu_kernel_test-container -v /kernel_dev:/kernel_dev ubuntu:25.10
 # Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_test -f Dockerfile_kernel_test .
-# From git: docker build -t ubuntu_kernel_test -f Dockerfile_kernel_test https://github.com/chzigotzky/kernels.git#main
-# From git with buildx: docker buildx build -t ubuntu_kernel_test -f Dockerfile_kernel_test https://github.com/chzigotzky/kernels.git#main
+# From git: docker build -t ubuntu_kernel_test -f Dockerfile_kernel_test https://github.com/chzigotzky/kernels.git#5_10
+# From git with buildx: docker buildx build -t ubuntu_kernel_test -f Dockerfile_kernel_test https://github.com/chzigotzky/kernels.git#5_10
 # Create a container and start it (Container status: <HOSTNAME/FQDN/IP ADDRESS>:9090): docker run -d -p 9080:3389 -p 9090:8080 --name ubuntu_kernel_test-container -v /kernel_dev:/kernel_dev ubuntu_kernel_test 
 # Volume mount explanation: -v /path/on/host:/path/in/container
 # List all Docker containers: docker ps -a

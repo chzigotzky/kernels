@@ -61,8 +61,8 @@ CMD ["sh", "-c", "while true; do BODY=\"The Docker container for the cross compi
 
 # sudo usermod -aG docker $USER
 # Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_dev .
-# From git: docker build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#6_12
-# From git with buildx: docker buildx build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#6_12 
+# From git: docker build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#5_10
+# From git with buildx: docker buildx build -t ubuntu_kernel_dev https://github.com/chzigotzky/kernels.git#5_10 
 # Create a container and start it (Container status: <HOSTNAME/FQDN/IP ADDRESS>:9090): docker run -d -p 9090:8080 --name ubuntu_kernel_dev-container -v /kernel_dev:/kernel_dev ubuntu_kernel_dev
 # Volume mount explanation: -v /path/on/host:/path/in/container
 # List all Docker containers: docker ps -a
