@@ -21,7 +21,11 @@ Clone this git repository with branches:
 3. git branch --track 5_10 origin/5_10
 4. git branch --track 6_12 origin/6_12
 
-Using the Dockerfile for building the Linux PPC cross compiling image:
+Using the Dockerfiles for building the Linux PPC cross compiling and test images.
+
+These images can be used for Docker containers or for pods in Kubernetes.
+
+The biggest advantage is, that the Linux PowerPC cross-compiling environment can be easily rolled out and is always the same on a wide variety of computers.
 
 Local (You must be in the directory containing the Dockerfile) docker build -t ubuntu_kernel_dev .
 
