@@ -1,0 +1,33 @@
+nfs:
+  server: 192.168.178.43
+  path: /kernels
+  storage: 1Ti
+
+kernelDev:
+  replicaCount: 3
+  image: 192.168.178.43:5000/ubuntu_kernel_dev:latest
+  nodeName: buildhost 
+  containerPort: 8080
+  servicePort: 9090
+
+kernelTest:
+  replicaCount: 1
+  image: 192.168.178.43:5000/ubuntu_kernel_test:latest
+  nodeName: worker02 
+  containerPorts:
+    - http: 8080
+    - rdp: 3389
+  servicePorts:
+    - http: 9091
+      nodePort: 30000
+    - rdp: 9080
+      nodePort: 30001
+
+rootPassword: root
+
+ingress:
+  enabled: true
+  className: nginx
+
+metallb:
+  ipRange: "192.168.178.240-192.168.178.250"
