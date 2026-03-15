@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.12.76 Kernel Configuration
+# Linux/powerpc 6.12.77 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc-linux-gnu-gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0"
 CONFIG_CC_IS_GCC=y
@@ -3265,7 +3265,6 @@ CONFIG_VIDEO_IR_I2C=m
 # Lens drivers
 #
 CONFIG_VIDEO_AK7375=m
-CONFIG_VIDEO_DW9714=m
 # CONFIG_VIDEO_DW9719 is not set
 # CONFIG_VIDEO_DW9768 is not set
 CONFIG_VIDEO_DW9807_VCM=m
