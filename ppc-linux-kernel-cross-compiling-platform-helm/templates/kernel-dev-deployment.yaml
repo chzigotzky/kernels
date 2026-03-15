@@ -20,9 +20,10 @@ spec:
           ports:
             - containerPort: {{ .Values.kernelDev.containerPort }}
           volumeMounts:
-            - name: kernels
-              mountPath: /kernels
+            - name: kernel-dev-volume
+              mountPath: /kernel_dev
       volumes:
-        - name: kernels
-          persistentVolumeClaim:
-            claimName: nfs-pvc
+        - name: kernel-dev-volume
+          hostPath:
+            path: /kernel_dev
+            type: DirectoryOrCreate

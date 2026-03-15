@@ -27,10 +27,9 @@ spec:
             - containerPort: 8080
             - containerPort: 3389
           volumeMounts:
-            - name: kernel-dev-volume
-              mountPath: /kernel_dev
+            - name: kernels
+              mountPath: /kernels
       volumes:
-        - name: kernel-dev-volume
-          hostPath:
-            path: /kernel_dev
-            type: DirectoryOrCreate
+        - name: kernels
+          persistentVolumeClaim:
+            claimName: nfs-pvc
