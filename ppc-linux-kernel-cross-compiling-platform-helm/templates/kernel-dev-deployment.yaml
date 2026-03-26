@@ -23,7 +23,4 @@ spec:
             - name: kernel-dev-volume
               mountPath: /kernel_dev
       volumes:
-        - name: kernel-dev-volume
-          hostPath:
-            path: /kernel_dev
-            type: DirectoryOrCreate
+      {{- toYaml .Values.kernelDev.volumes | nindent 8 }} 
