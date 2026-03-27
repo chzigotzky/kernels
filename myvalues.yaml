@@ -1,0 +1,22 @@
+kernelDev:
+  nodeName: worker02
+  volumes:
+    - name: kernels
+      persistentVolumeClaim:
+        claimName: nfs-pvc
+
+kernelTest:
+  nodeName: buildhost
+  volumes:
+    - name: kernel-dev-volume
+      hostPath:
+        path: /kernel_dev
+        type: DirectoryOrCreate
+
+#
+# helm show values ppc-linux-kernel-cross-compiling-platform-helm-0.3.0.tgz
+#
+# helm upgrade --install ppc-linux-kernel-cross-compiling ppc-linux-kernel-cross-compiling-platform-helm-0.3.0.tgz --dry-run=client
+#
+# helm upgrade --install ppc-linux-kernel-cross-compiling ppc-linux-kernel-cross-compiling-platform-helm-0.3.0.tgz --dry-run=client -f myvalues.yaml
+#
