@@ -30,6 +30,4 @@ spec:
             - name: kernels
               mountPath: /kernels
       volumes:
-        - name: kernels
-          persistentVolumeClaim:
-            claimName: nfs-pvc
+      {{- toYaml .Values.kernelTest.volumes | nindent 8 }} 
