@@ -9,6 +9,11 @@ kernelDev:
   nodeName: buildhost 
   containerPort: 8080
   servicePort: 9090
+  volumes:
+    - name: kernel-dev-volume
+      hostPath:
+        path: /kernel_dev
+        type: DirectoryOrCreate
 
 kernelTest:
   replicaCount: 1
@@ -22,6 +27,10 @@ kernelTest:
       nodePort: 30000
     - rdp: 9080
       nodePort: 30001
+  volumes:
+    - name: kernels
+      persistentVolumeClaim:
+        claimName: nfs-pvc
 
 rootPassword: root
 
