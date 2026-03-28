@@ -1,14 +1,14 @@
 kernelDev:
   nodeName: worker02
   volumes:
-    - name: kernels
+    - name: kernel-dev-volume
       persistentVolumeClaim:
         claimName: nfs-pvc
 
 kernelTest:
   nodeName: buildhost
   volumes:
-    - name: kernel-dev-volume
+    - name: kernels
       hostPath:
         path: /kernel_dev
         type: DirectoryOrCreate
