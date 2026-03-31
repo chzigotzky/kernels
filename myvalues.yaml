@@ -16,7 +16,13 @@ kernelTest:
 #
 # helm show values ppc-linux-kernel-cross-compiling-platform-helm-0.3.0.tgz
 #
+# helm upgrade --install ppc-linux-kernel-cross-compiling-platform-helm-0.3.0.tgz --dry-run --set kernelDev.replicaCount=4
+#
 # helm upgrade --install ppc-linux-kernel-cross-compiling ppc-linux-kernel-cross-compiling-platform-helm-0.3.0.tgz --dry-run=client
 #
 # helm upgrade --install ppc-linux-kernel-cross-compiling ppc-linux-kernel-cross-compiling-platform-helm-0.3.0.tgz --dry-run=client -f myvalues.yaml
+#
+# Back to the "values.yaml" file from the HELM chart after applying "myvalues.yaml":
+#
+# helm upgrade ppc-linux-kernel-cross-compiling https://github.com/chzigotzky/kernels/releases/download/v0.3.0_HELM_chart/ppc-linux-kernel-cross-compiling-platform-helm-0.3.0.tgz -- reset-values
 #
