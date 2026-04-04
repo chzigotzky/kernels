@@ -21,6 +21,8 @@ Clone this git repository with branches:
 3. git branch --track 5_10 origin/5_10
 4. git branch --track 6_12 origin/6_12
 
+Determining the virtualization and container type: systemd-detect-virt
+
 There are some Dockerfiles for building the Linux PPC cross compiling and test images.
 
 These images can be used for Docker containers or for pods in Kubernetes.
