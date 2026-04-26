@@ -36,7 +36,7 @@ openssh-server \
 && cd /opt \
 && wget -O firefox.tar.xz "https://download.mozilla.org/?product=firefox-latest&os=linux64" \
 && tar xvf firefox.tar.xz \
-&& ln -s firefox/firefox /usr/local/bin/firefox
+&& ln -s /opt/firefox/firefox /usr/local/bin/firefox
 
 # A good directory for the volume mount point in the container
 WORKDIR /kernel_dev
