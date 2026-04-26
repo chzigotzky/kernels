@@ -34,8 +34,7 @@ openssh-server \
 && echo "exec fvwm3" > /etc/xrdp/startwm.sh \ 
 && chmod 777 /etc/xrdp/startwm.sh \
 && wget -O firefox.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64" \
-&& tar xjf firefox.tar.bz2 \
-&& ln -s firefox/firefox /usr/local/bin/firefox 
+&& tar xjf firefox.tar.bz2
 
 # A good directory for the volume mount point in the container
 WORKDIR /kernel_dev
