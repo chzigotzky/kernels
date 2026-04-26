@@ -7,6 +7,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Upgrading the userland and installing the PowerPC kernel test environment 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 bash \
+iputils-ping \
+iputils-tracepath \
+bind9-dnsutils \
+iproute2 \
+net-tools \
 vim \
 git \
 curl \

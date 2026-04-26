@@ -7,6 +7,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Upgrading the userland and installing the kernel cross compiling environment 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 bash \
+iputils-ping \
+iputils-tracepath \
+dnsutils \
+iproute2 \
+net-tools \
 vim \
 git \
 curl \
