@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 7.1.0 Kernel Configuration
+# Linux/powerpc 7.1.0-rc1 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc64-linux-gnu-gcc (GCC) 14.1.1 20240507 (Red Hat Cross 14.1.1-1)"
 CONFIG_CC_IS_GCC=y
@@ -32,7 +32,7 @@ CONFIG_THREAD_INFO_IN_TASK=y
 CONFIG_INIT_ENV_ARG_LIMIT=32
 # CONFIG_COMPILE_TEST is not set
 # CONFIG_WERROR is not set
-CONFIG_LOCALVERSION="-a6-powerpc64-smp"
+CONFIG_LOCALVERSION="-powerpc64-smp"
 CONFIG_LOCALVERSION_AUTO=y
 CONFIG_BUILD_SALT=""
 CONFIG_HAVE_KERNEL_GZIP=y
@@ -1120,10 +1120,6 @@ CONFIG_TIPC_MEDIA_UDP=y
 CONFIG_TIPC_CRYPTO=y
 CONFIG_TIPC_DIAG=y
 CONFIG_ATM=y
-CONFIG_ATM_CLIP=y
-# CONFIG_ATM_CLIP_NO_ICMP is not set
-CONFIG_ATM_LANE=y
-CONFIG_ATM_MPOA=y
 CONFIG_ATM_BR2684=y
 # CONFIG_ATM_BR2684_IPFILTER is not set
 CONFIG_L2TP=y
@@ -1192,7 +1188,6 @@ CONFIG_NET_FLOW_LIMIT=y
 # end of Network testing
 # end of Networking options
 
-# CONFIG_HAMRADIO is not set
 # CONFIG_CAN is not set
 CONFIG_BT=m
 CONFIG_BT_BREDR=y
@@ -1278,7 +1273,6 @@ CONFIG_NET_9P=y
 # CONFIG_NET_9P_FD is not set
 CONFIG_NET_9P_VIRTIO=y
 # CONFIG_NET_9P_DEBUG is not set
-# CONFIG_CAIF is not set
 # CONFIG_CEPH_LIB is not set
 # CONFIG_NFC is not set
 # CONFIG_PSAMPLE is not set
@@ -1972,15 +1966,6 @@ CONFIG_VIRTIO_NET=y
 # CONFIG_NLMON is not set
 # CONFIG_ARCNET is not set
 CONFIG_ATM_DRIVERS=y
-# CONFIG_ATM_DUMMY is not set
-# CONFIG_ATM_TCP is not set
-# CONFIG_ATM_LANAI is not set
-# CONFIG_ATM_ENI is not set
-# CONFIG_ATM_NICSTAR is not set
-# CONFIG_ATM_IDT77252 is not set
-# CONFIG_ATM_IA is not set
-# CONFIG_ATM_FORE200E is not set
-# CONFIG_ATM_HE is not set
 # CONFIG_ATM_SOLOS is not set
 CONFIG_ETHERNET=y
 # CONFIG_NET_VENDOR_3COM is not set
@@ -2067,9 +2052,6 @@ CONFIG_NET_VENDOR_NI=y
 # CONFIG_NET_VENDOR_NVIDIA is not set
 # CONFIG_NET_VENDOR_OKI is not set
 # CONFIG_ETHOC is not set
-CONFIG_NET_VENDOR_PACKET_ENGINES=y
-# CONFIG_HAMACHI is not set
-# CONFIG_YELLOWFIN is not set
 # CONFIG_NET_VENDOR_PENSANDO is not set
 # CONFIG_NET_VENDOR_QLOGIC is not set
 # CONFIG_NET_VENDOR_BROCADE is not set
@@ -2346,7 +2328,6 @@ CONFIG_RTL8192C_COMMON=m
 CONFIG_USB4_NET=m
 # CONFIG_NETDEVSIM is not set
 CONFIG_NET_FAILOVER=y
-# CONFIG_ISDN is not set
 
 #
 # Input device support
