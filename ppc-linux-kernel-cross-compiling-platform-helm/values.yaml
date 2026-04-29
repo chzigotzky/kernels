@@ -39,4 +39,4 @@ ingress:
   className: nginx
 
 metallb:
-  ipRange: "192.168.178.240-192.168.178.250"
+  ipRange: "192.168.178.241-192.168.178.250"
