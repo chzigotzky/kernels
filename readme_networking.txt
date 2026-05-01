@@ -168,3 +168,14 @@ iptables -t nat -A POSTROUTING -s 172.17.0.0/16 -j MASQUERADE
 ---
 
 In PROXMOX, a bridge (vmbr0) is used that is directly connected to a physical interface such as eth0, and the container is then assigned an IP address from the same subnet as the host.
+
+---
+
+Troubleshooting DNS for Kubernetes Pods:
+
+1. kubectl -n kube-system edit configmap coredns
+
+2. Replace "forward . /etc/resolv.conf" with "forward . 1.1.1.1 8.8.8.8"
+
+3. kubectl -n kube-system rollout restart deployment coredns
+ 
