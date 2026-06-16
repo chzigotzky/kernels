@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 7.1.0 Kernel Configuration
+# Linux/powerpc 7.2.0 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc-linux-gnu-gcc (Debian 9.3.0-22) 9.3.0"
 CONFIG_CC_IS_GCC=y
@@ -29,7 +29,7 @@ CONFIG_THREAD_INFO_IN_TASK=y
 CONFIG_INIT_ENV_ARG_LIMIT=32
 # CONFIG_COMPILE_TEST is not set
 # CONFIG_WERROR is not set
-CONFIG_LOCALVERSION="-powerpc64-smp"
+CONFIG_LOCALVERSION="-a1-powerpc64-smp"
 CONFIG_LOCALVERSION_AUTO=y
 CONFIG_BUILD_SALT=""
 CONFIG_HAVE_KERNEL_GZIP=y
@@ -5245,7 +5245,6 @@ CONFIG_SYNC_FILE=y
 # CONFIG_SW_SYNC is not set
 # CONFIG_UDMABUF is not set
 # CONFIG_DMABUF_DEBUG is not set
-# CONFIG_DMABUF_SELFTESTS is not set
 # CONFIG_DMABUF_HEAPS is not set
 # end of DMABUF options
 
