@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 7.2.0-rc2 Kernel Configuration
+# Linux/powerpc 7.2.0-rc3 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="powerpc-linux-gnu-gcc (Debian 9.3.0-22) 9.3.0"
 CONFIG_CC_IS_GCC=y
@@ -2153,6 +2153,7 @@ CONFIG_OF_MDIO=y
 # CONFIG_MDIO_BCM_UNIMAC is not set
 # CONFIG_MDIO_HISI_FEMAC is not set
 # CONFIG_MDIO_MVUSB is not set
+# CONFIG_MDIO_MSCC_MIIM is not set
 # CONFIG_MDIO_OCTEON is not set
 # CONFIG_MDIO_IPQ4019 is not set
 # CONFIG_MDIO_THUNDER is not set
