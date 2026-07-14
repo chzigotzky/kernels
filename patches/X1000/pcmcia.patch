@@ -1,0 +1,25 @@
+diff --git a/drivers/ata/pata_pcmcia.c b/drivers/ata/pata_pcmcia.c
+index 9b0e6c7..16b064c 100644
+--- a/drivers/ata/pata_pcmcia.c
++++ b/drivers/ata/pata_pcmcia.c
+@@ -322,6 +322,7 @@ static void pcmcia_remove_one(struct pcmcia_device *pdev)
+ 	PCMCIA_DEVICE_MANF_CARD(0x0098, 0x0000),	/* Toshiba */
+ 	PCMCIA_DEVICE_MANF_CARD(0x00a4, 0x002d),
+ 	PCMCIA_DEVICE_MANF_CARD(0x00ce, 0x0000),	/* Samsung */
++	PCMCIA_DEVICE_MANF_CARD(0x00f1, 0x0101),		/* SanDisk High (>8G) CFA */
+ 	PCMCIA_DEVICE_MANF_CARD(0x0319, 0x0000),	/* Hitachi */
+ 	PCMCIA_DEVICE_MANF_CARD(0x2080, 0x0001),
+ 	PCMCIA_DEVICE_MANF_CARD(0x4e01, 0x0100),	/* Viking CFA */
+diff --git a/drivers/pcmcia/ds.c b/drivers/pcmcia/ds.c
+index a9258f6..3660670 100644
+--- a/drivers/pcmcia/ds.c
++++ b/drivers/pcmcia/ds.c
+@@ -419,6 +419,8 @@ static int pcmcia_device_query(struct pcmcia_device *p_dev)
+ 		mutex_lock(&p_dev->socket->ops_mutex);
+ 		p_dev->manf_id = manf_id.manf;
+ 		p_dev->card_id = manf_id.card;
++                printk(KERN_INFO
++                         "pcmcia: Found: manuf: %x device %x\n",manf_id.manf, manf_id.card);
+ 		p_dev->has_manf_id = 1;
+ 		p_dev->has_card_id = 1;
+ 		mutex_unlock(&p_dev->socket->ops_mutex);
