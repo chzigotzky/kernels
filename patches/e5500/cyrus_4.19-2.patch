@@ -1,0 +1,87 @@
+diff -rupN a/arch/powerpc/boot/dts/fsl/cyrus_p5020.dts b/arch/powerpc/boot/dts/fsl/cyrus_p5020.dts
+--- a/arch/powerpc/boot/dts/fsl/cyrus_p5020.dts	2018-09-02 23:37:30.000000000 +0200
++++ b/arch/powerpc/boot/dts/fsl/cyrus_p5020.dts	2018-09-03 09:08:13.113384560 +0200
+@@ -150,6 +150,25 @@
+ 				  0 0x00010000>;
+ 		};
+ 	};
++
++	gpio-poweroff {
++		compatible = "gpio-poweroff";
++		gpios = <&gpio0 3 1>;
++	};
++
++	gpio-restart {
++		compatible = "gpio-restart";
++		gpios = <&gpio0 2 1>;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		hdd {
++			label = "Disk activity";
++			gpios = <&gpio0 5 0>;
++			linux,default-trigger = "disk-activity";
++		};
++	};
+ };
+ 
+ /include/ "p5020si-post.dtsi"
+diff -rupN a/arch/powerpc/platforms/85xx/corenet_generic.c b/arch/powerpc/platforms/85xx/corenet_generic.c
+--- a/arch/powerpc/platforms/85xx/corenet_generic.c	2018-09-02 23:37:30.000000000 +0200
++++ b/arch/powerpc/platforms/85xx/corenet_generic.c	2018-09-03 09:08:13.113384560 +0200
+@@ -59,6 +59,16 @@ void __init corenet_gen_pic_init(void)
+ 	}
+ }
+ 
++/* If someone has registered a poweroff callback, invoke it */
++static void __noreturn corenet_generic_halt(void)
++{
++	if (pm_power_off)
++	pm_power_off();
++
++	/* Should not return */
++	for(;;);
++}
++
+ /*
+  * Setup the architecture
+  */
+@@ -124,6 +134,15 @@ static const struct of_device_id of_devi
+ 	{
+ 		.name		= "handles",
+ 	},
++	{
++		.name		= "gpio-poweroff",
++	},
++	{
++		.name		= "gpio-restart",
++	},
++	{
++		.name		= "leds",
++	},
+ 	{}
+ };
+ 
+@@ -174,6 +193,8 @@ static int __init corenet_generic_probe(
+ 	extern struct smp_ops_t smp_85xx_ops;
+ #endif
+ 
++	ppc_md.halt = corenet_generic_halt;
++
+ 	if (of_device_compatible_match(of_root, boards))
+ 		return 1;
+ 
+diff -rupN a/arch/powerpc/sysdev/fsl_pci.c b/arch/powerpc/sysdev/fsl_pci.c
+--- a/arch/powerpc/sysdev/fsl_pci.c	2018-09-02 23:37:30.000000000 +0200
++++ b/arch/powerpc/sysdev/fsl_pci.c	2018-09-03 09:08:35.193482962 +0200
+@@ -127,9 +127,6 @@ static inline void setup_swiotlb_ops(str
+ 
+ static int fsl_pci_dma_set_mask(struct device *dev, u64 dma_mask)
+ {
+-	if (!dev->dma_mask || !dma_supported(dev, dma_mask))
+-		return -EIO;
+-
+ 	/*
+ 	 * Fix up PCI devices that are able to DMA to the large inbound
+ 	 * mapping that allows addressing any RAM address from across PCI.
