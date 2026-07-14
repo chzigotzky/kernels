@@ -1,13 +1,13 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 4.19.65 Kernel Configuration
+# Linux/powerpc 4.19.325 Kernel Configuration
 #
 
 #
-# Compiler: powerpc-linux-gnu-gcc (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0
+# Compiler: powerpc-linux-gnu-gcc (Debian 9.3.0-22) 9.3.0
 #
 CONFIG_CC_IS_GCC=y
-CONFIG_GCC_VERSION=70400
+CONFIG_GCC_VERSION=90300
 CONFIG_CLANG_VERSION=0
 CONFIG_CC_HAS_ASM_GOTO=y
 CONFIG_IRQ_WORK=y
@@ -18,7 +18,7 @@ CONFIG_BUILDTIME_EXTABLE_SORT=y
 #
 CONFIG_INIT_ENV_ARG_LIMIT=32
 # CONFIG_COMPILE_TEST is not set
-CONFIG_LOCALVERSION="_A-EON_X1000_Nemo"
+CONFIG_LOCALVERSION="-powerpc64-smp"
 CONFIG_LOCALVERSION_AUTO=y
 CONFIG_BUILD_SALT=""
 CONFIG_HAVE_KERNEL_GZIP=y
@@ -33,8 +33,11 @@ CONFIG_POSIX_MQUEUE=y
 CONFIG_POSIX_MQUEUE_SYSCTL=y
 CONFIG_CROSS_MEMORY_ATTACH=y
 CONFIG_USELIB=y
-# CONFIG_AUDIT is not set
+CONFIG_AUDIT=y
 CONFIG_HAVE_ARCH_AUDITSYSCALL=y
+CONFIG_AUDITSYSCALL=y
+CONFIG_AUDIT_WATCH=y
+CONFIG_AUDIT_TREE=y
 
 #
 # IRQ subsystem
@@ -61,10 +64,9 @@ CONFIG_HZ_PERIODIC=y
 # CONFIG_NO_HZ_FULL is not set
 CONFIG_NO_HZ=y
 CONFIG_HIGH_RES_TIMERS=y
-# CONFIG_PREEMPT_NONE is not set
+CONFIG_PREEMPT_NONE=y
 # CONFIG_PREEMPT_VOLUNTARY is not set
-CONFIG_PREEMPT=y
-CONFIG_PREEMPT_COUNT=y
+# CONFIG_PREEMPT is not set
 
 #
 # CPU/Task time and stats accounting
@@ -80,11 +82,10 @@ CONFIG_VIRT_CPU_ACCOUNTING_NATIVE=y
 #
 # RCU Subsystem
 #
-CONFIG_PREEMPT_RCU=y
+CONFIG_TREE_RCU=y
 # CONFIG_RCU_EXPERT is not set
 CONFIG_SRCU=y
 CONFIG_TREE_SRCU=y
-CONFIG_TASKS_RCU=y
 CONFIG_RCU_STALL_COMMON=y
 CONFIG_RCU_NEED_SEGCBLIST=y
 CONFIG_BUILD_BIN2C=y
@@ -229,7 +230,6 @@ CONFIG_STACKTRACE_SUPPORT=y
 CONFIG_TRACE_IRQFLAGS_SUPPORT=y
 CONFIG_LOCKDEP_SUPPORT=y
 CONFIG_RWSEM_XCHGADD_ALGORITHM=y
-CONFIG_GENERIC_LOCKBREAK=y
 CONFIG_GENERIC_HWEIGHT=y
 CONFIG_ARCH_HAS_DMA_SET_COHERENT_MASK=y
 CONFIG_PPC=y
@@ -348,12 +348,7 @@ CONFIG_PCIEPORTBUS=y
 CONFIG_PCIEAER=y
 # CONFIG_PCIEAER_INJECT is not set
 # CONFIG_PCIE_ECRC is not set
-CONFIG_PCIEASPM=y
-# CONFIG_PCIEASPM_DEBUG is not set
-CONFIG_PCIEASPM_DEFAULT=y
-# CONFIG_PCIEASPM_POWERSAVE is not set
-# CONFIG_PCIEASPM_POWER_SUPERSAVE is not set
-# CONFIG_PCIEASPM_PERFORMANCE is not set
+# CONFIG_PCIEASPM is not set
 # CONFIG_PCIE_DPC is not set
 # CONFIG_PCIE_PTM is not set
 # CONFIG_PCI_MSI is not set
@@ -455,6 +450,7 @@ CONFIG_HAVE_PERF_REGS=y
 CONFIG_HAVE_PERF_USER_STACK_DUMP=y
 CONFIG_HAVE_ARCH_JUMP_LABEL=y
 CONFIG_HAVE_RCU_TABLE_FREE=y
+CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM=y
 CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG=y
 CONFIG_ARCH_WEAK_RELEASE_ACQUIRE=y
 CONFIG_ARCH_WANT_IPC_PARSE_VERSION=y
@@ -482,9 +478,6 @@ CONFIG_CLONE_BACKWARDS=y
 CONFIG_OLD_SIGSUSPEND=y
 CONFIG_COMPAT_OLD_SIGACTION=y
 CONFIG_COMPAT_32BIT_TIME=y
-CONFIG_ARCH_OPTIONAL_KERNEL_RWX=y
-CONFIG_ARCH_HAS_STRICT_KERNEL_RWX=y
-# CONFIG_STRICT_KERNEL_RWX is not set
 CONFIG_ARCH_HAS_PHYS_TO_DMA=y
 # CONFIG_REFCOUNT_FULL is not set
 
@@ -538,7 +531,7 @@ CONFIG_MSDOS_PARTITION=y
 # CONFIG_ULTRIX_PARTITION is not set
 # CONFIG_SUN_PARTITION is not set
 # CONFIG_KARMA_PARTITION is not set
-# CONFIG_EFI_PARTITION is not set
+CONFIG_EFI_PARTITION=y
 # CONFIG_SYSV68_PARTITION is not set
 # CONFIG_CMDLINE_PARTITION is not set
 CONFIG_BLOCK_COMPAT=y
@@ -559,7 +552,11 @@ CONFIG_MQ_IOSCHED_KYBER=y
 CONFIG_IOSCHED_BFQ=y
 CONFIG_PREEMPT_NOTIFIERS=y
 CONFIG_ASN1=y
-CONFIG_UNINLINE_SPIN_UNLOCK=y
+CONFIG_INLINE_SPIN_UNLOCK_IRQ=y
+CONFIG_INLINE_READ_UNLOCK=y
+CONFIG_INLINE_READ_UNLOCK_IRQ=y
+CONFIG_INLINE_WRITE_UNLOCK=y
+CONFIG_INLINE_WRITE_UNLOCK_IRQ=y
 CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=y
 CONFIG_MUTEX_SPIN_ON_OWNER=y
 CONFIG_RWSEM_SPIN_ON_OWNER=y
@@ -627,6 +624,7 @@ CONFIG_COMPAT_NETLINK_MESSAGES=y
 CONFIG_PACKET=y
 # CONFIG_PACKET_DIAG is not set
 CONFIG_UNIX=y
+CONFIG_UNIX_SCM=y
 # CONFIG_UNIX_DIAG is not set
 # CONFIG_TLS is not set
 CONFIG_XFRM=y
@@ -657,6 +655,7 @@ CONFIG_INET_AH=y
 CONFIG_INET_ESP=y
 # CONFIG_INET_ESP_OFFLOAD is not set
 # CONFIG_INET_IPCOMP is not set
+CONFIG_INET_TABLE_PERTURB_ORDER=16
 CONFIG_INET_TUNNEL=y
 CONFIG_INET_XFRM_MODE_TRANSPORT=y
 CONFIG_INET_XFRM_MODE_TUNNEL=y
@@ -704,7 +703,6 @@ CONFIG_IPV6_NDISC_NODETYPE=y
 CONFIG_HAVE_NET_DSA=y
 # CONFIG_NET_DSA is not set
 # CONFIG_VLAN_8021Q is not set
-# CONFIG_DECNET is not set
 # CONFIG_LLC2 is not set
 # CONFIG_ATALK is not set
 # CONFIG_X25 is not set
@@ -714,7 +712,7 @@ CONFIG_HAVE_NET_DSA=y
 # CONFIG_IEEE802154 is not set
 # CONFIG_NET_SCHED is not set
 # CONFIG_DCB is not set
-# CONFIG_DNS_RESOLVER is not set
+CONFIG_DNS_RESOLVER=y
 # CONFIG_BATMAN_ADV is not set
 # CONFIG_OPENVSWITCH is not set
 # CONFIG_VSOCKETS is not set
@@ -849,7 +847,7 @@ CONFIG_PREVENT_FIRMWARE_BUILD=y
 # Firmware loader
 #
 CONFIG_FW_LOADER=y
-CONFIG_EXTRA_FIRMWARE="radeon/ARUBA_me.bin radeon/ARUBA_pfp.bin radeon/ARUBA_rlc.bin radeon/BARTS_mc.bin radeon/BARTS_me.bin radeon/BARTS_pfp.bin radeon/BARTS_smc.bin radeon/bonaire_ce.bin radeon/bonaire_mc.bin radeon/bonaire_me.bin radeon/bonaire_mec.bin  radeon/bonaire_pfp.bin radeon/bonaire_rlc.bin radeon/bonaire_sdma.bin radeon/bonaire_smc.bin radeon/BONAIRE_uvd.bin radeon/BONAIRE_vce.bin radeon/BTC_rlc.bin radeon/CAICOS_mc.bin radeon/CAICOS_me.bin radeon/CAICOS_pfp.bin radeon/CAICOS_smc.bin radeon/CAYMAN_mc.bin radeon/CAYMAN_me.bin radeon/CAYMAN_pfp.bin radeon/CAYMAN_rlc.bin radeon/CAYMAN_smc.bin radeon/CEDAR_me.bin radeon/CEDAR_pfp.bin radeon/CEDAR_rlc.bin radeon/CEDAR_smc.bin radeon/CYPRESS_me.bin radeon/CYPRESS_pfp.bin radeon/CYPRESS_rlc.bin radeon/CYPRESS_smc.bin radeon/CYPRESS_uvd.bin radeon/hainan_ce.bin radeon/hainan_mc.bin radeon/hainan_me.bin radeon/hainan_pfp.bin radeon/hainan_rlc.bin radeon/hainan_smc.bin radeon/hawaii_ce.bin radeon/hawaii_mc.bin radeon/hawaii_me.bin radeon/hawaii_mec.bin radeon/hawaii_pfp.bin radeon/hawaii_rlc.bin radeon/hawaii_sdma.bin radeon/hawaii_smc.bin radeon/JUNIPER_me.bin radeon/JUNIPER_pfp.bin radeon/JUNIPER_rlc.bin radeon/JUNIPER_smc.bin radeon/kabini_ce.bin radeon/kabini_me.bin radeon/kabini_mec.bin radeon/kabini_pfp.bin radeon/kabini_rlc.bin radeon/kabini_sdma.bin radeon/kaveri_ce.bin radeon/kaveri_me.bin radeon/kaveri_mec2.bin radeon/kaveri_mec.bin radeon/kaveri_pfp.bin radeon/kaveri_rlc.bin radeon/kaveri_sdma.bin radeon/mullins_ce.bin radeon/mullins_me.bin radeon/mullins_mec.bin radeon/mullins_pfp.bin radeon/mullins_rlc.bin radeon/mullins_sdma.bin radeon/oland_ce.bin radeon/oland_mc.bin radeon/oland_me.bin radeon/oland_pfp.bin radeon/oland_rlc.bin radeon/oland_smc.bin radeon/PALM_me.bin radeon/PALM_pfp.bin radeon/pitcairn_ce.bin radeon/pitcairn_k_smc.bin radeon/pitcairn_mc.bin radeon/pitcairn_me.bin radeon/pitcairn_pfp.bin radeon/pitcairn_rlc.bin radeon/pitcairn_smc.bin radeon/R100_cp.bin radeon/R200_cp.bin radeon/R300_cp.bin radeon/R420_cp.bin radeon/R520_cp.bin radeon/R600_me.bin radeon/R600_pfp.bin radeon/R600_rlc.bin radeon/R600_uvd.bin radeon/R700_rlc.bin radeon/REDWOOD_me.bin radeon/REDWOOD_pfp.bin radeon/REDWOOD_rlc.bin radeon/REDWOOD_smc.bin radeon/RS600_cp.bin radeon/RS690_cp.bin radeon/RS780_me.bin radeon/RS780_pfp.bin radeon/RS780_uvd.bin radeon/RV610_me.bin radeon/RV610_pfp.bin radeon/RV620_me.bin radeon/RV620_pfp.bin radeon/RV630_me.bin radeon/RV630_pfp.bin radeon/RV635_me.bin radeon/RV635_pfp.bin radeon/RV670_me.bin radeon/RV670_pfp.bin radeon/RV710_me.bin radeon/RV710_pfp.bin radeon/RV710_smc.bin radeon/RV710_uvd.bin radeon/RV730_me.bin radeon/RV730_pfp.bin radeon/RV730_smc.bin radeon/RV740_smc.bin radeon/RV770_me.bin radeon/RV770_pfp.bin radeon/RV770_smc.bin radeon/RV770_uvd.bin radeon/SUMO2_me.bin radeon/SUMO2_pfp.bin radeon/SUMO_me.bin radeon/SUMO_pfp.bin radeon/SUMO_rlc.bin radeon/SUMO_uvd.bin radeon/tahiti_ce.bin radeon/tahiti_mc.bin radeon/tahiti_me.bin radeon/tahiti_pfp.bin radeon/tahiti_rlc.bin radeon/tahiti_smc.bin radeon/TAHITI_uvd.bin radeon/TAHITI_vce.bin radeon/TURKS_mc.bin radeon/TURKS_me.bin radeon/TURKS_pfp.bin radeon/TURKS_smc.bin radeon/verde_ce.bin radeon/verde_mc.bin radeon/verde_me.bin radeon/verde_pfp.bin radeon/verde_rlc.bin radeon/verde_smc.bin radeon/si58_mc.bin radeon/hawaii_k_smc.bin radeon/hainan_k_smc.bin radeon/bonaire_k_smc.bin radeon/tahiti_k_smc.bin radeon/oland_k_smc.bin radeon/verde_k_smc.bin"
+CONFIG_EXTRA_FIRMWARE="radeon/ARUBA_me.bin radeon/ARUBA_pfp.bin radeon/ARUBA_rlc.bin radeon/BARTS_mc.bin radeon/BARTS_me.bin radeon/BARTS_pfp.bin radeon/BARTS_smc.bin radeon/bonaire_ce.bin radeon/bonaire_mc.bin radeon/bonaire_me.bin radeon/bonaire_mec.bin  radeon/bonaire_pfp.bin radeon/bonaire_rlc.bin radeon/bonaire_sdma.bin radeon/bonaire_smc.bin radeon/BONAIRE_uvd.bin radeon/BONAIRE_vce.bin radeon/BTC_rlc.bin radeon/CAICOS_mc.bin radeon/CAICOS_me.bin radeon/CAICOS_pfp.bin radeon/CAICOS_smc.bin radeon/CAYMAN_mc.bin radeon/CAYMAN_me.bin radeon/CAYMAN_pfp.bin radeon/CAYMAN_rlc.bin radeon/CAYMAN_smc.bin radeon/CEDAR_me.bin radeon/CEDAR_pfp.bin radeon/CEDAR_rlc.bin radeon/CEDAR_smc.bin radeon/CYPRESS_me.bin radeon/CYPRESS_pfp.bin radeon/CYPRESS_rlc.bin radeon/CYPRESS_smc.bin radeon/CYPRESS_uvd.bin radeon/hainan_ce.bin radeon/hainan_mc.bin radeon/hainan_me.bin radeon/hainan_pfp.bin radeon/hainan_rlc.bin radeon/hainan_smc.bin radeon/hawaii_ce.bin radeon/hawaii_mc.bin radeon/hawaii_me.bin radeon/hawaii_mec.bin radeon/hawaii_pfp.bin radeon/hawaii_rlc.bin radeon/hawaii_sdma.bin radeon/hawaii_smc.bin radeon/JUNIPER_me.bin radeon/JUNIPER_pfp.bin radeon/JUNIPER_rlc.bin radeon/JUNIPER_smc.bin radeon/kabini_ce.bin radeon/kabini_me.bin radeon/kabini_mec.bin radeon/kabini_pfp.bin radeon/kabini_rlc.bin radeon/kabini_sdma.bin radeon/kaveri_ce.bin radeon/kaveri_me.bin radeon/kaveri_mec2.bin radeon/kaveri_mec.bin radeon/kaveri_pfp.bin radeon/kaveri_rlc.bin radeon/kaveri_sdma.bin radeon/mullins_ce.bin radeon/mullins_me.bin radeon/mullins_mec.bin radeon/mullins_pfp.bin radeon/mullins_rlc.bin radeon/mullins_sdma.bin radeon/oland_ce.bin radeon/oland_mc.bin radeon/oland_me.bin radeon/oland_pfp.bin radeon/oland_rlc.bin radeon/oland_smc.bin radeon/PALM_me.bin radeon/PALM_pfp.bin radeon/pitcairn_ce.bin radeon/pitcairn_k_smc.bin radeon/pitcairn_mc.bin radeon/pitcairn_me.bin radeon/pitcairn_pfp.bin radeon/pitcairn_rlc.bin radeon/pitcairn_smc.bin radeon/R100_cp.bin radeon/R200_cp.bin radeon/R300_cp.bin radeon/R420_cp.bin radeon/R520_cp.bin radeon/R600_me.bin radeon/R600_pfp.bin radeon/R600_rlc.bin radeon/R600_uvd.bin radeon/R700_rlc.bin radeon/REDWOOD_me.bin radeon/REDWOOD_pfp.bin radeon/REDWOOD_rlc.bin radeon/REDWOOD_smc.bin radeon/RS600_cp.bin radeon/RS690_cp.bin radeon/RS780_me.bin radeon/RS780_pfp.bin radeon/RS780_uvd.bin radeon/RV610_me.bin radeon/RV610_pfp.bin radeon/RV620_me.bin radeon/RV620_pfp.bin radeon/RV630_me.bin radeon/RV630_pfp.bin radeon/RV635_me.bin radeon/RV635_pfp.bin radeon/RV670_me.bin radeon/RV670_pfp.bin radeon/RV710_me.bin radeon/RV710_pfp.bin radeon/RV710_smc.bin radeon/RV710_uvd.bin radeon/RV730_me.bin radeon/RV730_pfp.bin radeon/RV730_smc.bin radeon/RV740_smc.bin radeon/RV770_me.bin radeon/RV770_pfp.bin radeon/RV770_smc.bin radeon/RV770_uvd.bin radeon/SUMO2_me.bin radeon/SUMO2_pfp.bin radeon/SUMO_me.bin radeon/SUMO_pfp.bin radeon/SUMO_rlc.bin radeon/SUMO_uvd.bin radeon/tahiti_ce.bin radeon/tahiti_mc.bin radeon/tahiti_me.bin radeon/tahiti_pfp.bin radeon/tahiti_rlc.bin radeon/tahiti_smc.bin radeon/TAHITI_uvd.bin radeon/TAHITI_vce.bin radeon/TURKS_mc.bin radeon/TURKS_me.bin radeon/TURKS_pfp.bin radeon/TURKS_smc.bin radeon/verde_ce.bin radeon/verde_mc.bin radeon/verde_me.bin radeon/verde_pfp.bin radeon/verde_rlc.bin radeon/verde_smc.bin radeon/si58_mc.bin radeon/hawaii_k_smc.bin radeon/hainan_k_smc.bin radeon/bonaire_k_smc.bin radeon/tahiti_k_smc.bin radeon/oland_k_smc.bin radeon/verde_k_smc.bin renesas_usb_fw.mem"
 CONFIG_EXTRA_FIRMWARE_DIR="/lib/firmware"
 # CONFIG_FW_LOADER_USER_HELPER is not set
 CONFIG_WANT_DEV_COREDUMP=y
@@ -884,6 +882,7 @@ CONFIG_OF_NET=y
 CONFIG_OF_MDIO=y
 CONFIG_OF_RESERVED_MEM=y
 # CONFIG_OF_OVERLAY is not set
+CONFIG_OF_DMA_DEFAULT_COHERENT=y
 CONFIG_ARCH_MIGHT_HAVE_PC_PARPORT=y
 # CONFIG_PARPORT is not set
 CONFIG_BLK_DEV=y
@@ -899,7 +898,6 @@ CONFIG_BLK_DEV_LOOP_MIN_COUNT=8
 # CONFIG_BLK_DEV_DRBD is not set
 # CONFIG_BLK_DEV_NBD is not set
 # CONFIG_BLK_DEV_SKD is not set
-# CONFIG_BLK_DEV_SX8 is not set
 # CONFIG_BLK_DEV_RAM is not set
 # CONFIG_CDROM_PKTCDVD is not set
 # CONFIG_ATA_OVER_ETH is not set
@@ -1012,7 +1010,6 @@ CONFIG_BLK_DEV_SD=y
 # CONFIG_CHR_DEV_ST is not set
 # CONFIG_CHR_DEV_OSST is not set
 CONFIG_BLK_DEV_SR=y
-# CONFIG_BLK_DEV_SR_VENDOR is not set
 CONFIG_CHR_DEV_SG=y
 # CONFIG_CHR_DEV_SCH is not set
 # CONFIG_SCSI_CONSTANTS is not set
@@ -1046,6 +1043,7 @@ CONFIG_SCSI_LOWLEVEL=y
 # CONFIG_SCSI_AIC94XX is not set
 # CONFIG_SCSI_MVSAS is not set
 # CONFIG_SCSI_MVUMI is not set
+# CONFIG_SCSI_DPT_I2O is not set
 # CONFIG_SCSI_ADVANSYS is not set
 # CONFIG_SCSI_ARCMSR is not set
 # CONFIG_SCSI_ESAS2R is not set
@@ -1215,6 +1213,7 @@ CONFIG_DUMMY=y
 # CONFIG_NET_TEAM is not set
 # CONFIG_MACVLAN is not set
 # CONFIG_VXLAN is not set
+# CONFIG_GENEVE is not set
 # CONFIG_GTP is not set
 # CONFIG_MACSEC is not set
 # CONFIG_NETCONSOLE is not set
@@ -1543,7 +1542,6 @@ CONFIG_WLAN_VENDOR_QUANTENNA=y
 # CONFIG_NETDEVSIM is not set
 # CONFIG_NET_FAILOVER is not set
 # CONFIG_ISDN is not set
-# CONFIG_NVM is not set
 
 #
 # Input device support
@@ -1768,7 +1766,7 @@ CONFIG_HW_RANDOM_PASEMI=y
 # CONFIG_TCG_TPM is not set
 CONFIG_DEVPORT=y
 # CONFIG_XILLYBUS is not set
-# CONFIG_RANDOM_TRUST_CPU is not set
+# CONFIG_RANDOM_TRUST_BOOTLOADER is not set
 
 #
 # I2C support
@@ -1804,7 +1802,7 @@ CONFIG_I2C_ALGOBIT=y
 # CONFIG_I2C_AMD8111 is not set
 # CONFIG_I2C_I801 is not set
 # CONFIG_I2C_ISCH is not set
-# CONFIG_I2C_PIIX4 is not set
+CONFIG_I2C_PIIX4=m
 # CONFIG_I2C_NFORCE2 is not set
 # CONFIG_I2C_SIS5595 is not set
 # CONFIG_I2C_SIS630 is not set
@@ -1878,6 +1876,7 @@ CONFIG_POWER_SUPPLY=y
 # CONFIG_CHARGER_BQ2415X is not set
 # CONFIG_CHARGER_SMB347 is not set
 # CONFIG_BATTERY_GAUGE_LTC2941 is not set
+# CONFIG_BATTERY_RT5033 is not set
 CONFIG_HWMON=y
 # CONFIG_HWMON_DEBUG_CHIP is not set
 
@@ -2072,7 +2071,6 @@ CONFIG_MFD_CORE=m
 # CONFIG_ABX500_CORE is not set
 # CONFIG_MFD_STMPE is not set
 # CONFIG_MFD_SYSCON is not set
-# CONFIG_MFD_TI_AM335X_TSCADC is not set
 # CONFIG_MFD_LP3943 is not set
 # CONFIG_MFD_LP8788 is not set
 # CONFIG_MFD_TI_LMU is not set
@@ -2840,10 +2838,10 @@ CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=y
 #
 # Frame buffer Devices
 #
-CONFIG_FB=y
-# CONFIG_FIRMWARE_EDID is not set
 CONFIG_FB_CMDLINE=y
 CONFIG_FB_NOTIFY=y
+CONFIG_FB=y
+# CONFIG_FIRMWARE_EDID is not set
 CONFIG_FB_DDC=y
 CONFIG_FB_CFB_FILLRECT=y
 CONFIG_FB_CFB_COPYAREA=y
@@ -2987,7 +2985,7 @@ CONFIG_SND_CMIPCI=y
 # CONFIG_SND_OXYGEN is not set
 # CONFIG_SND_CS4281 is not set
 # CONFIG_SND_CS46XX is not set
-# CONFIG_SND_CTXFI is not set
+CONFIG_SND_CTXFI=m
 # CONFIG_SND_DARLA20 is not set
 # CONFIG_SND_GINA20 is not set
 # CONFIG_SND_LAYLA20 is not set
@@ -3045,7 +3043,11 @@ CONFIG_SND_HDA_INTEL=y
 # CONFIG_SND_HDA_RECONFIG is not set
 # CONFIG_SND_HDA_INPUT_BEEP is not set
 # CONFIG_SND_HDA_PATCH_LOADER is not set
-# CONFIG_SND_HDA_CODEC_REALTEK is not set
+CONFIG_SND_HDA_CODEC_REALTEK=m
+
+#
+# Set to Y if you want auto-loading the codec driver
+#
 # CONFIG_SND_HDA_CODEC_ANALOG is not set
 CONFIG_SND_HDA_CODEC_SIGMATEL=y
 # CONFIG_SND_HDA_CODEC_VIA is not set
@@ -3349,7 +3351,6 @@ CONFIG_USB_SERIAL_OPTION=y
 # CONFIG_USB_EMI26 is not set
 # CONFIG_USB_ADUTUX is not set
 # CONFIG_USB_SEVSEG is not set
-# CONFIG_USB_RIO500 is not set
 # CONFIG_USB_LEGOTOWER is not set
 # CONFIG_USB_LCD is not set
 # CONFIG_USB_CYPRESS_CY7C63 is not set
@@ -3638,7 +3639,6 @@ CONFIG_R8712U=m
 # CONFIG_MOST is not set
 # CONFIG_KS7010 is not set
 # CONFIG_GREYBUS is not set
-# CONFIG_MTK_MMC is not set
 
 #
 # Gasket devices
@@ -3667,7 +3667,6 @@ CONFIG_IOMMU_SUPPORT=y
 # Rpmsg drivers
 #
 # CONFIG_RPMSG_VIRTIO is not set
-# CONFIG_SOUNDWIRE is not set
 
 #
 # SOC (System On Chip) specific Drivers
@@ -3895,15 +3894,26 @@ CONFIG_NFS_FS=y
 CONFIG_NFS_V2=y
 CONFIG_NFS_V3=y
 # CONFIG_NFS_V3_ACL is not set
-# CONFIG_NFS_V4 is not set
+CONFIG_NFS_V4=y
 # CONFIG_NFS_SWAP is not set
+CONFIG_NFS_V4_1=y
+CONFIG_NFS_V4_2=y
+CONFIG_PNFS_FILE_LAYOUT=y
+CONFIG_PNFS_BLOCK=y
+CONFIG_PNFS_FLEXFILE_LAYOUT=y
+CONFIG_NFS_V4_1_IMPLEMENTATION_ID_DOMAIN="kernel.org"
+CONFIG_NFS_V4_1_MIGRATION=y
 CONFIG_ROOT_NFS=y
+# CONFIG_NFS_USE_LEGACY_DNS is not set
+CONFIG_NFS_USE_KERNEL_DNS=y
 # CONFIG_NFSD is not set
 CONFIG_GRACE_PERIOD=y
 CONFIG_LOCKD=y
 CONFIG_LOCKD_V4=y
 CONFIG_NFS_COMMON=y
 CONFIG_SUNRPC=y
+CONFIG_SUNRPC_GSS=y
+CONFIG_SUNRPC_BACKCHANNEL=y
 # CONFIG_SUNRPC_DEBUG is not set
 # CONFIG_CEPH_FS is not set
 CONFIG_CIFS=y
@@ -4307,7 +4317,6 @@ CONFIG_SCHED_DEBUG=y
 # CONFIG_SCHEDSTATS is not set
 # CONFIG_SCHED_STACK_END_CHECK is not set
 # CONFIG_DEBUG_TIMEKEEPING is not set
-# CONFIG_DEBUG_PREEMPT is not set
 
 #
 # Lock Debugging (spinlocks, mutexes, etc...)
@@ -4367,7 +4376,6 @@ CONFIG_FUNCTION_TRACER=y
 CONFIG_FUNCTION_GRAPH_TRACER=y
 # CONFIG_PREEMPTIRQ_EVENTS is not set
 # CONFIG_IRQSOFF_TRACER is not set
-# CONFIG_PREEMPT_TRACER is not set
 # CONFIG_SCHED_TRACER is not set
 # CONFIG_HWLAT_TRACER is not set
 # CONFIG_FTRACE_SYSCALLS is not set
