@@ -1,0 +1,21 @@
+X1000
+e5500
+
+New:
+
+- Linux 7.2-rc5 Released: "Once More We Have Quite A Massive -rc5": https://www.phoronix.com/news/Linux-7.2-rc5-Released 
+- The "New Normal" Of Audio Quirks Submitted For Linux 7.2-rc5: https://www.phoronix.com/news/Linux-7.2-rc5-Audio-Fixes 
+- Linux 7.2-rc5 Fixing Longstanding Bug In IPv4 Networking Over Firewire: https://www.phoronix.com/news/Linux-7.2-Fix-IPv4-Firewire 
+- 7.2-rc5 announcement: https://lore.kernel.org/lkml/CAHk-=whS0VZVKRDJL46JKLyD2BjcrMmVtOwtz4v=75t8w+QVbw@mail.gmail.com/T/#u 
+- Sound fixes (including HD-audio and USB-audio fixes): https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57a92aaba9089601bbe8f520fbc3c8d858498c21 
+- Networking fixes (including vhost-net and VirtIO_transport fixes): https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d326f83e819c53aa05c40d64f5805d6237b6aa1b
+- NFSd fix: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5a52217525cb394117d92722b7f0fec510c882b4 
+- BTRFS fixes: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=51f247c4b293b470723e69a321e2cc5ecf9080db 
+- MM hotfixes (including VirtIO balloon fix): https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b95f03f04d475aa6719d15a636ddf32222d55657 
+- DRM fixes: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e2a936998ab25cf7272847356390041c3143b498 
+- Ceph fixes: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dad0a87d79ff3e7e4ef35ebd588fe4f115329964 
+- IOMMU fixes: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a93212b3d1f517859ec8f540cd8d587155edafc8 
+- Firewire fix: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d99d2a953ad8d29e6b777f6770f10668a636842a
+- USB fixes: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v7.2-rc5&id=79ba9db003f7a58cdd690e809c7f298380dc5082
+- Linux Git log: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/?h=v7.2-rc5 
+- Phoronix articles, reviews and news stories covering Linux 7.2: https://www.phoronix.com/search/Linux%207.2
