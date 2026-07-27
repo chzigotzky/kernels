@@ -6,7 +6,8 @@ New:
 - Linux 7.2-rc5 Released: "Once More We Have Quite A Massive -rc5": https://www.phoronix.com/news/Linux-7.2-rc5-Released 
 - The "New Normal" Of Audio Quirks Submitted For Linux 7.2-rc5: https://www.phoronix.com/news/Linux-7.2-rc5-Audio-Fixes 
 - Linux 7.2-rc5 Fixing Longstanding Bug In IPv4 Networking Over Firewire: https://www.phoronix.com/news/Linux-7.2-Fix-IPv4-Firewire 
-- 7.2-rc5 announcement: https://lore.kernel.org/lkml/CAHk-=whS0VZVKRDJL46JKLyD2BjcrMmVtOwtz4v=75t8w+QVbw@mail.gmail.com/T/#u 
+- 7.2-rc5 announcement: https://lore.kernel.org/lkml/CAHk-=whS0VZVKRDJL46JKLyD2BjcrMmVtOwtz4v=75t8w+QVbw@mail.gmail.com/T/#u
+- e5500/DPAA: We don't need the fman_dtsec.c-v3.patch anymore 
 - Sound fixes (including HD-audio and USB-audio fixes): https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57a92aaba9089601bbe8f520fbc3c8d858498c21 
 - Networking fixes (including vhost-net and VirtIO_transport fixes): https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d326f83e819c53aa05c40d64f5805d6237b6aa1b
 - NFSd fix: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5a52217525cb394117d92722b7f0fec510c882b4 
