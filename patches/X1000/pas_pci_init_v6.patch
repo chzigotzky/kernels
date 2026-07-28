@@ -1,0 +1,102 @@
+powerpc/pasemi: Move Nemo i8259 initialization to pci.c
+
+The Nemo board requires the PCIe ports to be initialized before the
+SB600 ISA bridge can be accessed.
+
+Since pas_pci_init() is now called later during boot, the i8259
+initialization in pas_init_IRQ() happens too early and accesses
+registers that are not yet mapped, preventing the board from booting.
+
+Move the Nemo-specific i8259 initialization to pas_add_bridge(),
+after the ISA bridge has been discovered.
+
+Suggested-by: Darren Stevens <darren@stevens-zone.net>
+Tested-by: Christian Zigotzky <chzigotzky@xenosoft.de>
+Signed-off-by: Christian Zigotzky <chzigotzky@xenosoft.de>
+
+---
+v2:
+- Move Nemo i8259 initialization out of pas_init_IRQ() and into
+  pas_add_bridge() after the ISA bridge has been discovered.
+- Change nemo_init_IRQ() to no longer depend on the MPIC instance passed
+  from the IRQ setup path.
+- Move the nemo_init_IRQ() declaration to pasemi.h and add a no-op stub
+  for non-Nemo builds.
+- Fix missing prototype warning reported by Christophe Leroy.
+- Fix indentation and clean up the commit message.
+
+diff -rupN a/arch/powerpc/platforms/pasemi/pasemi.h b/arch/powerpc/platforms/pasemi/pasemi.h
+--- a/arch/powerpc/platforms/pasemi/pasemi.h	2026-07-26 23:45:48.000000000 +0200
++++ b/arch/powerpc/platforms/pasemi/pasemi.h	2026-07-28 07:44:31.924168227 +0200
+@@ -7,6 +7,12 @@ extern void pas_pci_init(void);
+ struct pci_dev;
+ extern void pas_pci_dma_dev_setup(struct pci_dev *dev);
+ 
++#ifdef CONFIG_PPC_PASEMI_NEMO
++extern void __init nemo_init_IRQ(void);
++#else
++static inline void __init nemo_init_IRQ(void) { }
++#endif
++
+ void __iomem *__init pasemi_pci_getcfgaddr(struct pci_dev *dev, int offset);
+ 
+ extern void __init pasemi_map_registers(void);
+diff -rupN a/arch/powerpc/platforms/pasemi/pci.c b/arch/powerpc/platforms/pasemi/pci.c
+--- a/arch/powerpc/platforms/pasemi/pci.c	2026-07-26 23:45:48.000000000 +0200
++++ b/arch/powerpc/platforms/pasemi/pci.c	2026-07-28 07:34:37.036634023 +0200
+@@ -265,6 +265,11 @@ static int __init pas_add_bridge(struct
+ 	 */
+ 	isa_bridge_find_early(hose);
+ 
++	/*
++	 * ISA bridge is now active, add the i8259 cascade (if needed)
++	 */
++	nemo_init_IRQ();
++
+ 	return 0;
+ }
+ 
+diff -rupN a/arch/powerpc/platforms/pasemi/setup.c b/arch/powerpc/platforms/pasemi/setup.c
+--- a/arch/powerpc/platforms/pasemi/setup.c	2026-07-26 23:45:48.000000000 +0200
++++ b/arch/powerpc/platforms/pasemi/setup.c	2026-07-28 07:54:54.147863161 +0200
+@@ -214,10 +214,12 @@ static void sb600_8259_cascade(struct ir
+ 	chip->irq_eoi(&desc->irq_data);
+ }
+ 
+-static void __init nemo_init_IRQ(struct mpic *mpic)
++void __init nemo_init_IRQ(void)
+ {
+ 	struct device_node *np;
+ 	int gpio_virq;
++	struct mpic *mpic;
++
+ 	/* Connect the SB600's legacy i8259 controller */
+ 	np = of_find_node_by_path("/pxp@0,e0000000");
+ 	i8259_init(np, 0);
+@@ -228,14 +230,10 @@ static void __init nemo_init_IRQ(struct
+ 	irq_set_chained_handler(gpio_virq, sb600_8259_cascade);
+ 	mpic_unmask_irq(irq_get_irq_data(gpio_virq));
+ 
++	mpic = irq_get_chip_data(gpio_virq);
+ 	irq_set_default_domain(mpic->irqhost);
+ }
+ 
+-#else
+-
+-static inline void nemo_init_IRQ(struct mpic *mpic)
+-{
+-}
+ #endif
+ 
+ static __init void pas_init_IRQ(void)
+@@ -297,9 +295,7 @@ static __init void pas_init_IRQ(void)
+ 		irq_set_irq_type(nmi_virq, IRQ_TYPE_EDGE_RISING);
+ 		mpic_unmask_irq(irq_get_irq_data(nmi_virq));
+ 	}
+-
+-	nemo_init_IRQ(mpic);
+-
++
+ 	of_node_put(mpic_node);
+ 	of_node_put(root);
+ }
