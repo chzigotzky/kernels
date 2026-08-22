@@ -1,5 +1,7 @@
 ![amilinux1](https://github.com/user-attachments/assets/5241f6bf-3519-4c40-8694-13cacefa5fe9)
 
+<img width="1920" height="1080" alt="X5000_PowerPC_e5500" src="https://github.com/user-attachments/assets/2b2f5777-32bd-4faa-b4b3-8944025a8bf1" />
+
 Linux kernels for X1000 and e5500 (X5000/20, X5000/40, Mirari, and QEMU VMs) PowerPC computers.
 
 Older Linux kernels and further downloads for X1000 and X5000 computers:
