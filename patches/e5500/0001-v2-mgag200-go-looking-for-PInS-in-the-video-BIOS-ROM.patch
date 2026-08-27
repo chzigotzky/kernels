@@ -1,0 +1,103 @@
+From 101ee2c18a64101978091006b797a7c327d295ff Mon Sep 17 00:00:00 2001
+From: Thomas Zimmermann <tzimmermann@suse.de>
+Date: Wed, 26 Aug 2026 11:03:11 +0200
+Subject: [PATCH] [v2] mgag200: go looking for PInS in the video BIOS ROM on
+ non-x86
+
+---
+ drivers/gpu/drm/mgag200/mgag200_g200.c | 38 ++++++++++++++++++++++++--
+ 1 file changed, 35 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/mgag200/mgag200_g200.c b/drivers/gpu/drm/mgag200/mgag200_g200.c
+index 9e6b4618fadd..57f87dfd26ec 100644
+--- a/drivers/gpu/drm/mgag200/mgag200_g200.c
++++ b/drivers/gpu/drm/mgag200/mgag200_g200.c
+@@ -239,7 +239,7 @@ static void mgag200_g200_interpret_bios(struct mgag200_g200_device *g200,
+ 	};
+ 	struct mga_device *mdev = &g200->base;
+ 	struct drm_device *dev = &mdev->base;
+-	const unsigned char *pins;
++	const unsigned char *pins = NULL;
+ 	unsigned int pins_len, version;
+ 	int offset;
+ 	int tmp;
+@@ -250,16 +250,34 @@ static void mgag200_g200_interpret_bios(struct mgag200_g200_device *g200,
+ 	if (memcmp(&bios[45], matrox, sizeof(matrox)) != 0)
+ 		return;
+ 
++#if defined(CONFIG_X86)
+ 	/* Get the PInS offset. */
+ 	if (size < MGA_BIOS_OFFSET + 2)
+ 		return;
+ 	offset = (bios[MGA_BIOS_OFFSET + 1] << 8) | bios[MGA_BIOS_OFFSET];
++	if (size < offset + 6)
++		return;
+ 
+ 	/* Get PInS data structure. */
++	pins = bios + offset;
++#else
++	/*
++	 * On OpenFirmware systems (PPC, MIPS, SPARC) the offset isn't stored
++	 * at the end of the BIOS image. Look for the PInS header instead.
++	 */
++	for (offset = 0 ; offset < size - 6; ++offset) {
++		const unsigned char *buf = bios + offset;
++
++		if (buf[0] == 0x2e && buf[1] == 0x41 && ((buf[2] == 64) || (buf[2] == 128))) {
++			pins = buf;
++			break;
++		}
++	}
+ 
+-	if (size < offset + 6)
++	if (!pins)
+ 		return;
+-	pins = bios + offset;
++#endif
++
+ 	if (pins[0] == 0x2e && pins[1] == 0x41) {
+ 		version = pins[5];
+ 		pins_len = pins[2];
+@@ -320,6 +338,8 @@ static void mgag200_g200_interpret_bios(struct mgag200_g200_device *g200,
+ 	}
+ }
+ 
++#define PCI_MGA_OPTION_BIOSEN 0x40000000
++
+ static void mgag200_g200_init_refclk(struct mgag200_g200_device *g200)
+ {
+ 	struct mga_device *mdev = &g200->base;
+@@ -328,11 +348,20 @@ static void mgag200_g200_init_refclk(struct mgag200_g200_device *g200)
+ 	unsigned char __iomem *rom;
+ 	unsigned char *bios;
+ 	size_t size;
++	u32 opt;
++	u32 biosbase;
++	u32 fbbase;
+ 
+ 	g200->pclk_min = 50000;
+ 	g200->pclk_max = 230000;
+ 	g200->ref_clk = 27050;
+ 
++	pci_read_config_dword(pdev, PCI_MGA_OPTION, &opt);
++	pci_write_config_dword(pdev, PCI_MGA_OPTION, opt | PCI_MGA_OPTION_BIOSEN);
++	pci_read_config_dword(pdev, PCI_ROM_ADDRESS, &biosbase);
++	pci_read_config_dword(pdev, PCI_BASE_ADDRESS_0, &fbbase);
++	pci_write_config_dword(pdev, PCI_ROM_ADDRESS, (fbbase & PCI_ROM_ADDRESS_MASK) | PCI_ROM_ADDRESS_ENABLE);
++
+ 	rom = pci_map_rom(pdev, &size);
+ 	if (!rom)
+ 		return;
+@@ -351,6 +380,9 @@ static void mgag200_g200_init_refclk(struct mgag200_g200_device *g200)
+ 	vfree(bios);
+ out:
+ 	pci_unmap_rom(pdev, rom);
++
++	pci_write_config_dword(pdev, PCI_ROM_ADDRESS, biosbase);
++	pci_write_config_dword(pdev, PCI_MGA_OPTION, opt);
+ }
+ 
+ static const struct mgag200_device_funcs mgag200_g200_device_funcs = {
+-- 
+2.55.0
+
