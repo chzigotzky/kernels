@@ -1,0 +1,73 @@
+diff -rupN a/arch/powerpc/platforms/pasemi/pasemi.h b/arch/powerpc/platforms/pasemi/pasemi.h
+--- a/arch/powerpc/platforms/pasemi/pasemi.h	2026-09-13 23:38:02.000000000 +0200
++++ b/arch/powerpc/platforms/pasemi/pasemi.h	2026-09-14 04:40:00.099127791 +0200
+@@ -7,6 +7,12 @@ extern void pas_pci_init(void);
+ struct pci_dev;
+ extern void pas_pci_dma_dev_setup(struct pci_dev *dev);
+ 
++#ifdef CONFIG_PPC_PASEMI_NEMO
++extern void __init nemo_init_IRQ(void);
++#else
++static inline void __init nemo_init_IRQ(void) { }
++#endif
++
+ void __iomem *__init pasemi_pci_getcfgaddr(struct pci_dev *dev, int offset);
+ 
+ extern void __init pasemi_map_registers(void);
+diff -rupN a/arch/powerpc/platforms/pasemi/pci.c b/arch/powerpc/platforms/pasemi/pci.c
+--- a/arch/powerpc/platforms/pasemi/pci.c	2026-09-13 23:38:02.000000000 +0200
++++ b/arch/powerpc/platforms/pasemi/pci.c	2026-09-14 04:40:00.099424146 +0200
+@@ -265,6 +265,11 @@ static int __init pas_add_bridge(struct
+ 	 */
+ 	isa_bridge_find_early(hose);
+ 
++	/*
++	 * ISA bridge is now active, add the i8259 cascade (if needed)
++	 */
++	nemo_init_IRQ();
++
+ 	return 0;
+ }
+ 
+diff -rupN a/arch/powerpc/platforms/pasemi/setup.c b/arch/powerpc/platforms/pasemi/setup.c
+--- a/arch/powerpc/platforms/pasemi/setup.c	2026-09-13 23:38:02.000000000 +0200
++++ b/arch/powerpc/platforms/pasemi/setup.c	2026-09-14 04:40:00.099712078 +0200
+@@ -216,10 +216,12 @@ static void sb600_8259_cascade(struct ir
+ 	chip->irq_eoi(&desc->irq_data);
+ }
+ 
+-static void __init nemo_init_IRQ(struct mpic *mpic)
++void __init nemo_init_IRQ(void)
+ {
+ 	struct device_node *np;
+ 	int gpio_virq;
++	struct mpic *mpic;
++
+ 	/* Connect the SB600's legacy i8259 controller */
+ 	np = of_find_node_by_path("/pxp@0,e0000000");
+ 	i8259_init(np, 0);
+@@ -230,14 +232,10 @@ static void __init nemo_init_IRQ(struct
+ 	irq_set_chained_handler(gpio_virq, sb600_8259_cascade);
+ 	mpic_unmask_irq(irq_get_irq_data(gpio_virq));
+ 
++	mpic = irq_get_chip_data(gpio_virq);
+ 	irq_set_default_domain(mpic->irqhost);
+ }
+ 
+-#else
+-
+-static inline void nemo_init_IRQ(struct mpic *mpic)
+-{
+-}
+ #endif
+ 
+ static __init void pas_init_IRQ(void)
+@@ -300,8 +298,6 @@ static __init void pas_init_IRQ(void)
+ 		mpic_unmask_irq(irq_get_irq_data(nmi_virq));
+ 	}
+ 
+-	nemo_init_IRQ(mpic);
+-
+ 	of_node_put(mpic_node);
+ 	of_node_put(root);
+ }
