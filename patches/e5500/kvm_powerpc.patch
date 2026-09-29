@@ -1,23 +1,31 @@
-diff -rupN a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
---- a/arch/powerpc/kvm/powerpc.c	2026-09-20 22:48:15.000000000 +0200
-+++ b/arch/powerpc/kvm/powerpc.c	2026-09-24 06:51:44.311940896 +0200
-@@ -146,6 +146,19 @@ int kvmppc_prepare_to_enter(struct kvm_v
- 			   are back at square 1 */
- 			continue;
+Fixes: 3efc7da61f6c ("KVM: PPC: Book3E: Increase FPU laziness")
+Reported-by: Christian Zigotzky <chzigotzky at xenosoft.de>
+Closes: https://lore.kernel.org/all/33342fbf-eb7b-bde6-2c8c-254fe8bfb993@xenosoft.de/
+Signed-off-by: Shrikanth Hegde <sshegde at linux.ibm.com>
+---
+ arch/powerpc/kvm/booke.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
+index 13ad4cf5fa71..5b9118eefe1d 100644
+--- a/arch/powerpc/kvm/booke.c
++++ b/arch/powerpc/kvm/booke.c
+@@ -1404,10 +1404,17 @@ int kvmppc_handle_exit(struct kvm_vcpu *vcpu, unsigned int exit_nr)
+ 		if (s <= 0)
+ 			r = (s << 2) | RESUME_HOST | (r & RESUME_FLAG_NV);
+ 		else {
+-			/* interrupts now hard-disabled */
++			/*
++			 * kvmppc_fix_ee_before_entry() marks the software
++			 * IRQ state enabled while interrupts are still
++			 * hard-disabled. So disable preemption while loading
++			 * guest FP and Altivec.
++			 */
+ 			kvmppc_fix_ee_before_entry();
++			preempt_disable();
+ 			kvmppc_load_guest_fp(vcpu);
+ 			kvmppc_load_guest_altivec(vcpu);
++			preempt_enable_no_resched();
  		}
-+		#ifdef CONFIG_PPC64
-+	               if (unlikely(local_paca->irq_happened != PACA_IRQ_HARD_DIS)) {
-+	               /*
-+	                * An interrupt arrived between the soft and hard
-+	                * disable. Replay it and retry guest entry.
-+	                */
-+	                       local_irq_enable();
-+	                       local_irq_disable();
-+	                       hard_irq_disable();
-+	                       continue;
-+	               }
-+		#endif
-+
+ 	}
  
- 		guest_enter_irqoff();
- 		return 1;
