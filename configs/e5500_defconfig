@@ -51,7 +51,7 @@ CONFIG_THREAD_INFO_IN_TASK=y
 CONFIG_INIT_ENV_ARG_LIMIT=32
 # CONFIG_COMPILE_TEST is not set
 # CONFIG_WERROR is not set
-CONFIG_LOCALVERSION="-a4-powerpc64-smp"
+CONFIG_LOCALVERSION="-a5-powerpc64-smp"
 CONFIG_LOCALVERSION_AUTO=y
 CONFIG_BUILD_SALT=""
 CONFIG_HAVE_KERNEL_GZIP=y
@@ -1481,8 +1481,6 @@ CONFIG_DMA_SHARED_BUFFER=y
 #
 # Qualcomm firmware drivers
 #
-# CONFIG_QCOM_PAS is not set
-# CONFIG_QCOM_SCM is not set
 # end of Qualcomm firmware drivers
 
 #
@@ -2688,6 +2686,7 @@ CONFIG_I2C_ALGOBIT=y
 # CONFIG_I2C_EMEV2 is not set
 # CONFIG_I2C_GPIO is not set
 CONFIG_I2C_MPC=y
+# CONFIG_I2C_NT72676 is not set
 # CONFIG_I2C_OCORES is not set
 # CONFIG_I2C_PCA_PLATFORM is not set
 # CONFIG_I2C_RK3X is not set
@@ -2734,24 +2733,24 @@ CONFIG_SPI_BITBANG=y
 # CONFIG_SPI_CADENCE_XSPI is not set
 # CONFIG_SPI_CH341 is not set
 # CONFIG_SPI_DESIGNWARE is not set
-CONFIG_SPI_GPIO=y
+CONFIG_SPI_FSL_ESPI=y
 CONFIG_SPI_FSL_LIB=y
 CONFIG_SPI_FSL_CPM=y
 CONFIG_SPI_FSL_SPI=y
-CONFIG_SPI_FSL_ESPI=y
+CONFIG_SPI_GPIO=y
 # CONFIG_SPI_MICROCHIP_CORE_QSPI is not set
 # CONFIG_SPI_MICROCHIP_CORE_SPI is not set
+# CONFIG_SPI_MXIC is not set
 # CONFIG_SPI_OC_TINY is not set
 # CONFIG_SPI_PCI1XXXX is not set
 # CONFIG_SPI_SC18IS602 is not set
 # CONFIG_SPI_SIFIVE is not set
 # CONFIG_SPI_SN_F_OSPI is not set
-# CONFIG_SPI_MXIC is not set
+# CONFIG_SPI_TLE62X0 is not set
 # CONFIG_SPI_VIRTIO is not set
 # CONFIG_SPI_XCOMM is not set
 # CONFIG_SPI_XILINX is not set
 # CONFIG_SPI_ZYNQMP_GQSPI is not set
-# CONFIG_SPI_AMD is not set
 
 #
 # SPI Multiplexer support
@@ -2763,7 +2762,6 @@ CONFIG_SPI_FSL_ESPI=y
 #
 # CONFIG_SPI_SPIDEV is not set
 # CONFIG_SPI_LOOPBACK_TEST is not set
-# CONFIG_SPI_TLE62X0 is not set
 # CONFIG_SPI_SLAVE is not set
 # CONFIG_SPMI is not set
 # CONFIG_HSI is not set
@@ -4679,7 +4677,6 @@ CONFIG_HID_GLORIOUS=y
 # CONFIG_HID_MSI is not set
 # CONFIG_HID_KEYTOUCH is not set
 # CONFIG_HID_KYE is not set
-# CONFIG_HID_KYSONA is not set
 # CONFIG_HID_UCLOGIC is not set
 # CONFIG_HID_WALTOP is not set
 # CONFIG_HID_VIEWSONIC is not set
@@ -4715,6 +4712,7 @@ CONFIG_HID_MICROSOFT=y
 # CONFIG_HID_MULTITOUCH is not set
 CONFIG_HID_NINTENDO=m
 CONFIG_NINTENDO_FF=y
+CONFIG_NINTENDO_SWITCH2_USB=m
 # CONFIG_HID_NTI is not set
 # CONFIG_HID_NTRIG is not set
 # CONFIG_HID_NVIDIA_SHIELD is not set
@@ -4753,6 +4751,7 @@ CONFIG_HID_TOPRE=m
 # CONFIG_HID_UDRAW_PS3 is not set
 # CONFIG_HID_U2FZERO is not set
 # CONFIG_HID_UNIVERSAL_PIDFF is not set
+CONFIG_HID_PULSAR=m
 CONFIG_HID_WACOM=m
 CONFIG_HID_WIIMOTE=m
 CONFIG_HID_WINWING=m
@@ -5023,7 +5022,6 @@ CONFIG_MMC_SDHCI_OF_ESDHC=y
 # CONFIG_MMC_SPI is not set
 # CONFIG_MMC_CB710 is not set
 # CONFIG_MMC_VIA_SDMMC is not set
-# CONFIG_MMC_VUB300 is not set
 # CONFIG_MMC_USHC is not set
 # CONFIG_MMC_USDHI6ROL0 is not set
 CONFIG_MMC_CQHCI=y
@@ -5472,6 +5470,17 @@ CONFIG_FSL_GUTS=y
 # end of Enable LiteX SoC Builder specific drivers
 
 # CONFIG_WPCM450_SOC is not set
+
+#
+# ST SoC drivers
+#
+# end of ST SoC drivers
+
+#
+# StarFive SoC (System On Chip) specific Drivers
+#
+# end of StarFive SoC (System On Chip) specific Drivers
+
 # CONFIG_SOC_TI is not set
 
 #
