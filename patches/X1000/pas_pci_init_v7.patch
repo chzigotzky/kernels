@@ -6,7 +6,7 @@ diff -rupN a/arch/powerpc/platforms/pasemi/pasemi.h b/arch/powerpc/platforms/pas
  extern void pas_pci_dma_dev_setup(struct pci_dev *dev);
  
 +#ifdef CONFIG_PPC_PASEMI_NEMO
-+extern void __init nemo_init_IRQ(void);
++void __init nemo_init_IRQ(void);
 +#else
 +static inline void __init nemo_init_IRQ(void) { }
 +#endif
