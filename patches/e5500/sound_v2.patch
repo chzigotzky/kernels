@@ -1,0 +1,63 @@
+diff -rupN a/sound/core/pcm_compat.c b/sound/core/pcm_compat.c
+--- a/sound/core/pcm_compat.c	2026-11-01 22:26:31.000000000 +0100
++++ b/sound/core/pcm_compat.c	2026-11-03 10:01:54.228010513 +0100
+@@ -252,7 +252,7 @@ static int snd_pcm_ioctl_hw_params_compa
+ 		return -EFAULT;
+ 
+ 	if (refine) {
+-		err = snd_pcm_hw_refine_with_lock(substream, data);
++		err = snd_pcm_hw_refine(substream, data);
+ 		if (err < 0)
+ 			return err;
+ 		err = fixup_unreferenced_params(substream, data);
+diff -rupN a/sound/core/pcm_native.c b/sound/core/pcm_native.c
+--- a/sound/core/pcm_native.c	2026-11-01 22:26:31.000000000 +0100
++++ b/sound/core/pcm_native.c	2026-11-03 10:02:24.836343549 +0100
+@@ -932,29 +932,6 @@ static int snd_pcm_hw_params_user(struct
+  * this one should be used for ioctls and other external paths instead of
+  * direct call of snd_pcm_hw_refine()
+  */
+-static int snd_pcm_hw_refine_with_lock(struct snd_pcm_substream *substream,
+-				       struct snd_pcm_hw_params *params)
+-{
+-	struct snd_pcm_runtime *runtime;
+-	int err;
+-
+-	if (PCM_RUNTIME_CHECK(substream))
+-		return -ENXIO;
+-	runtime = substream->runtime;
+-	err = snd_pcm_buffer_access_lock(runtime);
+-	if (err < 0)
+-		return err;
+-	err = hw_params_state_check(substream);
+-	if (err)
+-		goto unlock;
+-
+-	err = snd_pcm_hw_refine(substream, params);
+-
+- unlock:
+-	snd_pcm_buffer_access_unlock(runtime);
+-	return err;
+-}
+-
+ static int snd_pcm_hw_refine_user(struct snd_pcm_substream *substream,
+ 				  struct snd_pcm_hw_params __user * _params)
+ {
+@@ -965,7 +942,7 @@ static int snd_pcm_hw_refine_user(struct
+ 	if (IS_ERR(params))
+ 		return PTR_ERR(params);
+ 
+-	err = snd_pcm_hw_refine_with_lock(substream, params);
++	err = snd_pcm_hw_refine(substream, params);
+ 	if (err < 0)
+ 		return err;
+ 
+@@ -4247,7 +4224,7 @@ static int snd_pcm_hw_refine_old_user(st
+ 	if (IS_ERR(oparams))
+ 		return PTR_ERR(oparams);
+ 	snd_pcm_hw_convert_from_old_params(params, oparams);
+-	err = snd_pcm_hw_refine_with_lock(substream, params);
++	err = snd_pcm_hw_refine(substream, params);
+ 	if (err < 0)
+ 		return err;
+ 
