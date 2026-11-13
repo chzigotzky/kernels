@@ -1,0 +1,20 @@
+diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
+index 13ad4cf5fa71..c35e98d544ec 100644
+--- a/arch/powerpc/kvm/booke.c
++++ b/arch/powerpc/kvm/booke.c
+@@ -1404,10 +1404,13 @@ int kvmppc_handle_exit(struct kvm_vcpu *vcpu, unsigned int exit_nr)
+ 		if (s <= 0)
+ 			r = (s << 2) | RESUME_HOST | (r & RESUME_FLAG_NV);
+ 		else {
+-			/* interrupts now hard-disabled */
+-			kvmppc_fix_ee_before_entry();
++			/*
++			 * Interrupts are still hard disabled and soft enabled
++			 * after loading the FP and Altivec.
++			 */
+ 			kvmppc_load_guest_fp(vcpu);
+ 			kvmppc_load_guest_altivec(vcpu);
++			kvmppc_fix_ee_before_entry();
+ 		}
+ 	}
+ 

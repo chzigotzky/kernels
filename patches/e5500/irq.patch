@@ -1,0 +1,28 @@
+diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm/hw_irq.h
+index b7eee6385ae5..075442366e1e 100644
+--- a/arch/powerpc/include/asm/hw_irq.h
++++ b/arch/powerpc/include/asm/hw_irq.h
+@@ -516,6 +516,23 @@ static inline unsigned long mtmsr_isync_irqsafe(unsigned long msr)
+ 
+ #define ARCH_IRQ_INIT_FLAGS	IRQ_NOREQUEST
+ 
++/*
++ * Hard-disable interrupts while keeping the IRQ tracing state
++ * consistent.
++ *
++ * On PPC64, local_irq_disable() only soft-disables interrupts, leaving
++ * a window where an interrupt can be recorded in irq_happened before
++ * interrupts are hard-disabled.
++ *
++ * On PPC32, hard_irq_disable() does not update the IRQ tracing state, so
++ * use local_irq_disable().
++ */
++#ifdef CONFIG_PPC64
++#define ppc_hard_irq_disable()	hard_irq_disable()
++#else
++#define ppc_hard_irq_disable()	local_irq_disable()
++#endif
++
+ #endif  /* __ASSEMBLER__ */
+ #endif	/* __KERNEL__ */
+ #endif	/* _ASM_POWERPC_HW_IRQ_H */
