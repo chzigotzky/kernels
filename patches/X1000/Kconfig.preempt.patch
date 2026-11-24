@@ -1,11 +1,11 @@
-diff -rupN a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
---- a/kernel/Kconfig.preempt	2026-11-15 23:30:11.000000000 +0100
-+++ b/kernel/Kconfig.preempt	2026-11-22 15:26:18.418741504 +0100
-@@ -22,7 +22,6 @@ choice
- config PREEMPT_NONE
- 	bool "No Forced Preemption (Server)"
- 	depends on !PREEMPT_RT
--	depends on ARCH_NO_PREEMPT
- 	select PREEMPT_NONE_BUILD if !PREEMPT_DYNAMIC
+diff -rupN a/arch/powerpc/platforms/pasemi/Kconfig b/arch/powerpc/platforms/pasemi/Kconfig
+--- a/arch/powerpc/platforms/pasemi/Kconfig	2026-11-22 23:57:40.000000000 +0100
++++ b/arch/powerpc/platforms/pasemi/Kconfig	2026-11-24 13:17:52.878712432 +0100
+@@ -19,6 +19,7 @@ config PPC_PASEMI_NEMO
+ 	bool "Nemo motherboard Support"
+ 	depends on PPC_PASEMI
+ 	select PPC_I8259
++	select ARCH_NO_PREEMPT
  	help
- 	  This is the traditional Linux preemption model, geared towards
+ 	  This option enables support for the 'Nemo' motherboard
+ 	  used in A-Eons's Amigaone X1000. This consists of some
